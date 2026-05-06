@@ -19,8 +19,8 @@ const productSchema = new mongoose.Schema(
     },
     vehicle: [
       {
-        type: String,
-        trim: true,
+        brand: String,
+        model: [String],
       },
     ],
     images: [

@@ -15,27 +15,29 @@ const protect = async (req, res, next) => {
       const decoded = verifyToken(token);
 
       req.user = await User.findOne({ email: decoded.email }).select(
-        "-password"
+        "-password",
       );
 
       if (!req.user) {
-        return res.status(401).json({ message: "User not found" });
+        return res.json({ message: "User not found" });
       }
 
       next();
     } catch (error) {
       console.error("JWT error:", error);
-      return res.status(401).json({ message: "Not authorized, token failed" });
+      return res.json({ message: "Not authorized, token failed" });
     }
   } else {
-    return res.status(401).json({ message: "No token, not authorized" });
+    return res.json({ message: "No token, not authorized" });
   }
 };
 
 const authorize = (...roles) => {
   return (req, res, next) => {
     if (!req.user || !roles.includes(req.user.role)) {
-      return res.status(403).json({ message: "Not authorized to access this route" });
+      return res
+        .status(403)
+        .json({ message: "Not authorized to access this route" });
     }
     next();
   };

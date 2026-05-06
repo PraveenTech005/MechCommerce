@@ -7,12 +7,16 @@ const register = async (req, res) => {
     const { name, email, password, phone, address } = req.body;
 
     if (!name || !email || !password || !phone || !address) {
-      return res.status(400).json({ message: "Please provide all required fields" });
+      return res
+        .status(400)
+        .json({ message: "Please provide all required fields" });
     }
 
     const userExists = await User.findOne({ $or: [{ email }, { phone }] });
     if (userExists) {
-      return res.status(400).json({ message: "Email/Phone already registered" });
+      return res
+        .status(400)
+        .json({ message: "Email/Phone already registered" });
     }
 
     const hashedPassword = await hashPassword(password);
@@ -23,7 +27,7 @@ const register = async (req, res) => {
       password: hashedPassword,
       phone,
       address,
-      role: "user" // Enforce default role for security
+      role: "user", // Enforce default role for security
     });
 
     if (newUser) {
@@ -44,7 +48,9 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ message: "Please provide email and password" });
+      return res
+        .status(400)
+        .json({ message: "Please provide email and password" });
     }
 
     const savedUser = await User.findOne({ email });
@@ -68,6 +74,21 @@ const login = async (req, res) => {
         token: generateToken(savedUser.email),
       },
     });
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const verifyUser = async (req, res) => {
+  try {
+    const isValid = await User.findOne({ email: req.user.email }).select(
+      "-password",
+    );
+
+    if (!isValid) return res.json({ message: "Not A Valid User" });
+
+    return res.json({ message: "User Verified", isValid });
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).json({ message: "Server error" });
@@ -106,4 +127,49 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-module.exports = { register, login, getProfile, getAllUsers };
+const updateUserRole = async (req, res) => {
+  try {
+    const { role } = req.body;
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.role = role || user.role;
+    await user.save();
+
+    res.status(200).json({
+      message: "User role updated successfully",
+      user: { _id: user._id, email: user.email, role: user.role },
+    });
+  } catch (error) {
+    console.error("Error updating user role:", error.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting user:", error.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = {
+  register,
+  login,
+  verifyUser,
+  getProfile,
+  getAllUsers,
+  updateUserRole,
+  deleteUser,
+};

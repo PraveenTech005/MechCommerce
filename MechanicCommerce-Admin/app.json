@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "Mechcommerce-Admin",
+    "slug": "Mechcommerce-Admin",
+    "scheme": "mechcommerce-admin",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.praveentech.MechCommerceAdmin"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.praveentech.MechCommerceAdmin"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-image"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "3b1daea7-70e5-464e-937d-205cb0650f2b"
+      }
+    }
+  }
+}

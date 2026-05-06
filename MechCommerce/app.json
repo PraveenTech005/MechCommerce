@@ -1,0 +1,42 @@
+{
+  "expo": {
+    "name": "MechCommerce",
+    "slug": "MechCommerce",
+    "scheme": "mechcommerce",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.praveentech.mecchcommerce"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/icon.png",
+        "backgroundImage": "./assets/splash.png",
+        "monochromeImage": "./assets/adaptive-icon.png"
+      },
+      "package": "com.praveentech.mecchcommerce"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "18b196c2-87b3-4ff4-b472-7106b9f0c5d4"
+      }
+    }
+  }
+}
