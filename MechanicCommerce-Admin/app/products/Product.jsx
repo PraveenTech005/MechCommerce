@@ -24,6 +24,37 @@ import imageStore from "../store/imageStore";
 // Get screen width for the slider
 const { width } = Dimensions.get("window");
 
+const CATEGORY_PLACEHOLDERS = {
+  Bike: [
+    "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=500",
+    "https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?q=80&w=500",
+    "https://images.unsplash.com/photo-1502744688674-c619d1586c9e?q=80&w=500",
+    "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=500",
+  ],
+  Car: [
+    "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=500",
+    "https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=500",
+    "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=500",
+    "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=500",
+  ],
+  Engine: [
+    "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=500",
+    "https://imgs.search.brave.com/2lodTy0u77NpkG4dNHWaik0GZFrbx4zHOPRHnNxO_zU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvNjcx/Nzk1NTcyL3Bob3Rv/L3Bvd2VyLWdlbmVy/YXRvci5qcGc_cz02/MTJ4NjEyJnc9MCZr/PTIwJmM9SHZXOEZU/MEllLTBzMGpEYkZH/dFNQY3ZSYVdVUWR3/WlVDcmtWaVhqOExx/dz0",
+    "https://imgs.search.brave.com/zSlCRnbiybg7AYfH-cG0dZvLdrRnD66EafFI3aBbT8U/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly90aHVt/YnMuZHJlYW1zdGlt/ZS5jb20vYi9jYXIt/cGFydHMtaXNvbGF0/ZWQtZW5naW5lLXdo/aXRlLTU5ODI1NTI1/LmpwZw",
+    "https://imgs.search.brave.com/XGTQj-RIhjhCAwN8CX7w21V1YzTD5pvfKNPQnD7cEfc/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wNzMv/NzY1LzM3Mi9zbWFs/bC9hdXRvbW90aXZl/LXBhcnRzLWFuZC10/b29scy1vbi13b3Jr/c2hvcC10YWJsZS1t/ZWNoYW5pY2FsLWVu/Z2luZWVyaW5nLXNl/cnZpY2UtYW5kLWNh/ci1yZXBhaXItZXF1/aXBtZW50LWNvbmNl/cHQtb2YtbWFpbnRl/bmFuY2UtYW5kLXRl/Y2hub2xvZ3ktcGhv/dG8uanBn"
+  ],
+  Accessories: [
+    "https://images.unsplash.com/photo-1542282088-fe8426682b8f?q=80&w=500",
+    "https://imgs.search.brave.com/VCa42_07zuSWafn-OE0MaRJxAAa7Q_ZyKy32QFhZTLs/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvOTA1/MjA1NTYwL3Bob3Rv/L2Jpa2UtYWNjZXNz/b3JpZXMtYmlrZS1o/ZWxtZXQtYmlrZS1n/bG92ZXMtZXllZ2xh/c3Nlcy1ib3R0bGUt/aW4taG9sZGVyLmpw/Zz9zPTYxMng2MTIm/dz0wJms9MjAmYz1s/d0pnTGNFVXVCLUx5/ZWZ4NkZBNzBnOVhy/bzBaenprajlhQ0JE/M3VOQlk4PQ",
+    "https://images.unsplash.com/photo-1583121274602-3e2820c69888?q=80&w=500",
+    "https://loremflickr.com/cache/resized/3279_5777073521_d6c262945f_c_500_500_nofilter.jpg",
+  ],
+};
+
+const DEFAULT_PLACEHOLDERS = [
+  "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=500",
+];
+
 const Product = () => {
   const { index } = useLocalSearchParams();
   const productIndex = parseInt(index);
@@ -58,7 +89,7 @@ const Product = () => {
   const [description, setDescription] = useState(
     products[productIndex].description || "",
   );
-  
+
   const [compatibilities, setCompatibilities] = useState(() => {
     const initial = [];
     const prodVehicles = products[productIndex].vehicle;
@@ -185,7 +216,7 @@ const Product = () => {
       const formattedVehicles = Object.values(
         compatibilities.reduce((acc, c) => {
           const brandName = typeof c.brand === 'object' ? (c.brand.brand || c.brand.name || String(c.brand._id)) : String(c.brand);
-          
+
           if (!acc[brandName]) {
             acc[brandName] = { brand: brandName, model: [] };
           }
@@ -219,7 +250,7 @@ const Product = () => {
       const newProducts = [...products];
       newProducts[productIndex] = { ...newProducts[productIndex], ...updatedProduct };
       setProducts(newProducts);
-      
+
       Toast.show({ type: "success", text1: "Product updated successfully!" });
       setIsEditing(false);
     } catch (error) {
@@ -231,10 +262,17 @@ const Product = () => {
   };
 
   const product = products[productIndex];
+  const getDisplayPlaceholders = () => {
+    if (product?.category && CATEGORY_PLACEHOLDERS[product.category]) {
+      return CATEGORY_PLACEHOLDERS[product.category];
+    }
+    return DEFAULT_PLACEHOLDERS;
+  };
+
   const displayImages =
     images && images.length > 0
       ? images
-      : ["https://via.placeholder.com/500"];
+      : getDisplayPlaceholders();
 
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.x;
@@ -416,12 +454,12 @@ const Product = () => {
                         Designed for
                       </Text>
                     </View>
-                    
+
                     <View className="gap-5">
                       {product.vehicle.map((v, i) => {
                         const brandName = typeof v.brand === 'object' ? v.brand.name || 'Unknown' : v.brand || 'Unknown';
                         const modelsArray = Array.isArray(v.model) ? v.model : [v.model].filter(Boolean);
-                        
+
                         return (
                           <View key={i}>
                             <Text className="text-slate-800 font-bold text-base mb-2 ml-1">
@@ -508,16 +546,14 @@ const Product = () => {
                       <TouchableOpacity
                         key={cat}
                         onPress={() => setCategory(cat)}
-                        className={`px-5 py-3 rounded-full border-2 ${
-                          category === cat 
-                            ? "bg-slate-900 border-slate-900 shadow-sm" 
-                            : "bg-white border-slate-100 shadow-sm"
-                        }`}
-                      >
-                        <Text 
-                          className={`font-bold ${
-                            category === cat ? "text-white" : "text-slate-500"
+                        className={`px-5 py-3 rounded-full border-2 ${category === cat
+                          ? "bg-slate-900 border-slate-900 shadow-sm"
+                          : "bg-white border-slate-100 shadow-sm"
                           }`}
+                      >
+                        <Text
+                          className={`font-bold ${category === cat ? "text-white" : "text-slate-500"
+                            }`}
                         >
                           {cat}
                         </Text>
@@ -581,7 +617,7 @@ const Product = () => {
                         {compatibilities.map((c, i) => (
                           <View key={i} className="flex-row items-center bg-rose-50 px-3 py-2 rounded-full border border-rose-100">
                             <Text className="text-rose-700 font-bold text-sm mr-2">
-                              {c.brand.brand} {c.model}
+                              {typeof c.brand === "object" ? (c.brand.brand || c.brand.name) : c.brand} {c.model}
                             </Text>
                             <TouchableOpacity onPress={() => removeCompatibility(i)}>
                               <Feather name="x" size={14} color="#BE123C" />
@@ -590,62 +626,79 @@ const Product = () => {
                         ))}
                       </View>
                     )}
-                    
-                    <View className="flex-row gap-4 mb-3">
-                      <View className="flex-1">
-                        <TouchableOpacity
-                          className="bg-slate-50 border-2 border-slate-100 rounded-2xl px-4 py-3 flex-row justify-between items-center"
-                          onPress={() => { setBrandOpen(!brandOpen); setModelOpen(false); }}
-                        >
-                          <Text className={selectedBrand ? "text-slate-900 font-bold" : "text-slate-400"}>
-                            {selectedBrand ? selectedBrand.brand : "Brand"}
-                          </Text>
-                          <Feather name={brandOpen ? "chevron-up" : "chevron-down"} size={18} color="#94A3B8" />
-                        </TouchableOpacity>
 
-                        {brandOpen && (
-                          <View className="bg-white border border-slate-200 rounded-2xl max-h-40 mt-2 shadow-sm overflow-hidden z-10">
-                            <ScrollView nestedScrollEnabled>
-                              {vehicles && vehicles.map((v) => (
+                    <View className="flex-row gap-4 mb-3 h-56">
+                      {/* Brands Column */}
+                      <View className="flex-1 bg-slate-50 border-2 border-slate-100 rounded-2xl p-3">
+                        <Text className="text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-2">
+                          Brands
+                        </Text>
+                        <ScrollView nestedScrollEnabled showsVerticalScrollIndicator={false}>
+                          <View className="flex-row flex-wrap gap-2">
+                            {vehicles &&
+                              vehicles.map((v) => (
                                 <TouchableOpacity
                                   key={v._id}
-                                  className="px-4 py-3 border-b border-slate-50"
-                                  onPress={() => { setSelectedBrand(v); setSelectedModel(""); setBrandOpen(false); }}
+                                  className={`px-3 py-1.5 rounded-full border ${selectedBrand?._id === v._id
+                                      ? "bg-slate-900 border-slate-900"
+                                      : "bg-white border-slate-200"
+                                    }`}
+                                  onPress={() => {
+                                    setSelectedBrand(v);
+                                    setSelectedModel("");
+                                  }}
                                 >
-                                  <Text className="text-slate-700 font-bold">{v.brand}</Text>
+                                  <Text
+                                    className={`font-bold text-xs ${selectedBrand?._id === v._id
+                                        ? "text-white"
+                                        : "text-slate-600"
+                                      }`}
+                                  >
+                                    {v.brand}
+                                  </Text>
                                 </TouchableOpacity>
                               ))}
-                            </ScrollView>
                           </View>
-                        )}
+                        </ScrollView>
                       </View>
 
-                      <View className="flex-1">
-                        <TouchableOpacity
-                          className="bg-slate-50 border-2 border-slate-100 rounded-2xl px-4 py-3 flex-row justify-between items-center"
-                          onPress={() => { if (selectedBrand) setModelOpen(!modelOpen); }}
-                        >
-                          <Text className={selectedModel ? "text-slate-900 font-bold" : "text-slate-400"}>
-                            {selectedModel || "Model"}
-                          </Text>
-                          <Feather name={modelOpen ? "chevron-up" : "chevron-down"} size={18} color="#94A3B8" />
-                        </TouchableOpacity>
-
-                        {modelOpen && selectedBrand && (
-                          <View className="bg-white border border-slate-200 rounded-2xl max-h-40 mt-2 shadow-sm overflow-hidden z-10">
-                            <ScrollView nestedScrollEnabled>
-                              {selectedBrand.model && selectedBrand.model.map((m, idx) => (
-                                <TouchableOpacity
-                                  key={idx}
-                                  className="px-4 py-3 border-b border-slate-50"
-                                  onPress={() => { setSelectedModel(m); setModelOpen(false); }}
-                                >
-                                  <Text className="text-slate-700 font-bold">{m}</Text>
-                                </TouchableOpacity>
-                              ))}
-                            </ScrollView>
-                          </View>
-                        )}
+                      {/* Models Column */}
+                      <View className="flex-1 bg-slate-50 border-2 border-slate-100 rounded-2xl p-3">
+                        <Text className="text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-2">
+                          Models
+                        </Text>
+                        <ScrollView nestedScrollEnabled showsVerticalScrollIndicator={false}>
+                          {selectedBrand ? (
+                            <View className="flex-row flex-wrap gap-2">
+                              {selectedBrand.model &&
+                                selectedBrand.model.map((m, idx) => (
+                                  <TouchableOpacity
+                                    key={idx}
+                                    className={`px-3 py-1.5 rounded-full border ${selectedModel === m
+                                        ? "bg-rose-600 border-rose-600"
+                                        : "bg-white border-slate-200"
+                                      }`}
+                                    onPress={() => setSelectedModel(m)}
+                                  >
+                                    <Text
+                                      className={`font-bold text-xs ${selectedModel === m
+                                          ? "text-white"
+                                          : "text-slate-600"
+                                        }`}
+                                    >
+                                      {m}
+                                    </Text>
+                                  </TouchableOpacity>
+                                ))}
+                            </View>
+                          ) : (
+                            <View className="flex-1 items-center justify-center pt-10">
+                              <Text className="text-slate-400 text-xs text-center font-medium">
+                                Select a brand
+                              </Text>
+                            </View>
+                          )}
+                        </ScrollView>
                       </View>
                     </View>
 

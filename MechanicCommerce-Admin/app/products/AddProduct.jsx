@@ -18,8 +18,7 @@ import { AppContext } from "../../context/AppContext";
 import axios from "axios";
 import { ActivityIndicator } from "react-native";
 
-const PLACEHOLDER =
-  "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=500&auto=format&fit=crop";
+
 
 const AddProduct = () => {
   const { products, setProducts, user, vehicles } = useContext(AppContext);
@@ -52,10 +51,13 @@ const AddProduct = () => {
   const addCompatibility = () => {
     if (selectedBrand && selectedModel) {
       const exists = compatibilities.find(
-        (c) => c.brand._id === selectedBrand._id && c.model === selectedModel
+        (c) => c.brand._id === selectedBrand._id && c.model === selectedModel,
       );
       if (!exists) {
-        setCompatibilities([...compatibilities, { brand: selectedBrand, model: selectedModel }]);
+        setCompatibilities([
+          ...compatibilities,
+          { brand: selectedBrand, model: selectedModel },
+        ]);
       }
       setSelectedBrand(null);
       setSelectedModel("");
@@ -102,20 +104,26 @@ const AddProduct = () => {
       const data = new FormData();
       data.append("file", {
         uri: imageUri,
-        type: `image/${imageUri.split('.').pop() || 'jpg'}`,
-        name: `photo.${imageUri.split('.').pop() || 'jpg'}`,
+        type: `image/${imageUri.split(".").pop() || "jpg"}`,
+        name: `photo.${imageUri.split(".").pop() || "jpg"}`,
       });
-      data.append("upload_preset", process.env.EXPO_PUBLIC_CLOUDINARY_UPLOAD_PRESET);
+      data.append(
+        "upload_preset",
+        process.env.EXPO_PUBLIC_CLOUDINARY_UPLOAD_PRESET,
+      );
       data.append("cloud_name", process.env.EXPO_PUBLIC_CLOUDINARY_CLOUD_NAME);
 
-      const res = await fetch(`https://api.cloudinary.com/v1_1/${process.env.EXPO_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`, {
-        method: "POST",
-        body: data,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "multipart/form-data",
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.EXPO_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+        {
+          method: "POST",
+          body: data,
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "multipart/form-data",
+          },
         },
-      });
+      );
       const result = await res.json();
       return result.secure_url;
     } catch (error) {
@@ -132,7 +140,7 @@ const AddProduct = () => {
       let uploadedUrls = [];
       if (images.length > 0) {
         const uploadPromises = images.map(async (uri) => {
-          if (uri.startsWith('http')) return uri;
+          if (uri.startsWith("http")) return uri;
           return await uploadToCloudinary(uri);
         });
         const results = await Promise.all(uploadPromises);
@@ -141,8 +149,11 @@ const AddProduct = () => {
 
       const formattedVehicles = Object.values(
         compatibilities.reduce((acc, c) => {
-          const brandName = typeof c.brand === 'object' ? (c.brand.brand || c.brand.name || String(c.brand._id)) : String(c.brand);
-          
+          const brandName =
+            typeof c.brand === "object"
+              ? c.brand.brand || c.brand.name || String(c.brand._id)
+              : String(c.brand);
+
           if (!acc[brandName]) {
             acc[brandName] = { brand: brandName, model: [] };
           }
@@ -150,7 +161,7 @@ const AddProduct = () => {
             acc[brandName].model.push(c.model);
           }
           return acc;
-        }, {})
+        }, {}),
       );
 
       const newProduct = {
@@ -161,20 +172,23 @@ const AddProduct = () => {
         description,
         isFeatured,
         vehicle: formattedVehicles,
-        images: uploadedUrls.length > 0 ? uploadedUrls : [PLACEHOLDER],
+        images: uploadedUrls,
       };
 
-      const res = await axios.post(`${process.env.EXPO_PUBLIC_API_SERVER}/product`, newProduct, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
+      const res = await axios.post(
+        `${process.env.EXPO_PUBLIC_API_SERVER}/product`,
+        newProduct,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
         },
-      });
+      );
 
-      // The backend will return a product with an _id, but here it's appended optimisticly 
-      // If res.data.product is available, we use that
-      const appendedProduct = res.data?.product || newProduct;
+      // The backend returns the created product directly as res.data
+      const appendedProduct = res.data && res.data._id ? res.data : newProduct;
 
-      setProducts([appendedProduct, ...products]);
+      setProducts([...products, appendedProduct]);
       setIsSubmitting(false);
       router.back();
     } catch (error) {
@@ -264,23 +278,23 @@ const AddProduct = () => {
 
           {/* Product Title */}
           <View>
-            <Text className="text-slate-500 font-bold text-xs uppercase tracking-wider mb-2 ml-1">
-              Product Title
+            <Text className="font-bold text-xs uppercase tracking-wider mb-2 ml-1 text-red-500">
+              Product Title <Text className="text-red-500">*</Text>
             </Text>
             <TextInput
               value={name}
               onChangeText={setName}
               placeholder="e.g. Lithium Ion Battery"
               placeholderTextColor="#94A3B8"
-              className="bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-4 text-slate-900 text-base font-bold"
+              className="bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-1 text-slate-900 text-base font-bold"
             />
           </View>
 
           {/* Price + Stock */}
           <View className="flex-row gap-4">
             <View className="flex-1">
-              <Text className="text-slate-500 font-bold text-xs uppercase tracking-wider mb-2 ml-1">
-                Price (₹)
+              <Text className="text-red-500 font-bold text-xs uppercase tracking-wider mb-2 ml-1">
+                Price (₹) <Text className="text-red-500">*</Text>
               </Text>
               <TextInput
                 value={price}
@@ -288,12 +302,12 @@ const AddProduct = () => {
                 placeholder="0"
                 placeholderTextColor="#cbd5e1"
                 keyboardType="numeric"
-                className="bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-4 text-rose-600 text-base font-black"
+                className="bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-3 text-rose-600 text-base font-black"
               />
             </View>
             <View className="flex-1">
-              <Text className="text-slate-500 font-bold text-xs uppercase tracking-wider mb-2 ml-1">
-                Stock
+              <Text className="text-red-500 font-bold text-xs uppercase tracking-wider mb-2 ml-1">
+                Stock <Text className="text-red-500">*</Text>
               </Text>
               <TextInput
                 value={stock}
@@ -301,31 +315,29 @@ const AddProduct = () => {
                 placeholder="10"
                 placeholderTextColor="#cbd5e1"
                 keyboardType="numeric"
-                className="bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-4 text-slate-900 text-base font-bold"
+                className="bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-3 text-slate-900 text-base font-bold"
               />
             </View>
           </View>
 
           {/* Category */}
           <View>
-            <Text className="text-slate-500 font-bold text-xs uppercase tracking-wider mb-3 ml-1">
-              Category
+            <Text className="text-red-500 font-bold text-xs uppercase tracking-wider mb-3 ml-1">
+              Category <Text className="text-red-500">*</Text>
             </Text>
             <View className="flex-row flex-wrap gap-3">
               {["Bike", "Car", "Engine", "Accessories"].map((cat) => (
                 <TouchableOpacity
                   key={cat}
                   onPress={() => setCategory(cat)}
-                  className={`px-5 py-3 rounded-full border-2 ${
-                    category === cat 
-                      ? "bg-slate-900 border-slate-900" 
-                      : "bg-slate-50 border-slate-100"
-                  }`}
-                >
-                  <Text 
-                    className={`font-bold ${
-                      category === cat ? "text-white" : "text-slate-500"
+                  className={`px-5 py-3 rounded-full border-2 ${category === cat
+                    ? "bg-slate-900 border-slate-900"
+                    : "bg-slate-50 border-slate-100"
                     }`}
+                >
+                  <Text
+                    className={`font-bold ${category === cat ? "text-white" : "text-slate-500"
+                      }`}
                   >
                     {cat}
                   </Text>
@@ -343,7 +355,10 @@ const AddProduct = () => {
             {compatibilities.length > 0 && (
               <View className="flex-row flex-wrap gap-2 mb-3">
                 {compatibilities.map((c, i) => (
-                  <View key={i} className="flex-row items-center bg-rose-50 px-3 py-2 rounded-full border border-rose-100">
+                  <View
+                    key={i}
+                    className="flex-row items-center bg-rose-50 px-3 py-2 rounded-full border border-rose-100"
+                  >
                     <Text className="text-rose-700 font-bold text-sm mr-2">
                       {c.brand.brand} {c.model}
                     </Text>
@@ -355,73 +370,78 @@ const AddProduct = () => {
               </View>
             )}
 
-            <View className="flex-row gap-4 mb-3">
-              <View className="flex-1">
-                <TouchableOpacity
-                  className="bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-4 flex-row justify-between items-center"
-                  onPress={() => {
-                    setBrandOpen(!brandOpen);
-                    setModelOpen(false);
-                  }}
-                >
-                  <Text className={selectedBrand ? "text-slate-900 font-bold" : "text-slate-400"}>
-                    {selectedBrand ? selectedBrand.brand : "Brand"}
-                  </Text>
-                  <Feather name={brandOpen ? "chevron-up" : "chevron-down"} size={18} color="#94A3B8" />
-                </TouchableOpacity>
-
-                {brandOpen && (
-                  <View className="bg-white border border-slate-200 rounded-2xl max-h-40 mt-2 shadow-sm overflow-hidden">
-                    <ScrollView nestedScrollEnabled>
-                      {vehicles && vehicles.map((v) => (
+            <View className="flex-row gap-4 mb-3 h-56">
+              {/* Brands Column */}
+              <View className="flex-1 bg-slate-50 border-2 border-slate-200 rounded-2xl p-3">
+                <Text className="text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-2">
+                  Brands
+                </Text>
+                <ScrollView nestedScrollEnabled showsVerticalScrollIndicator={false}>
+                  <View className="flex-row flex-wrap gap-2">
+                    {vehicles &&
+                      vehicles.map((v) => (
                         <TouchableOpacity
                           key={v._id}
-                          className="px-5 py-3 border-b border-slate-50"
+                          className={`px-3 py-1.5 rounded-full border ${selectedBrand?._id === v._id
+                            ? "bg-slate-900 border-slate-900"
+                            : "bg-white border-slate-200"
+                            }`}
                           onPress={() => {
                             setSelectedBrand(v);
                             setSelectedModel("");
-                            setBrandOpen(false);
                           }}
                         >
-                          <Text className="text-slate-700 font-bold">{v.brand}</Text>
+                          <Text
+                            className={`font-bold  ${selectedBrand?._id === v._id
+                              ? "text-white"
+                              : "text-slate-600"
+                              }`}
+                          >
+                            {v.brand}
+                          </Text>
                         </TouchableOpacity>
                       ))}
-                    </ScrollView>
                   </View>
-                )}
+                </ScrollView>
               </View>
 
-              <View className="flex-1">
-                <TouchableOpacity
-                  className="bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-4 flex-row justify-between items-center"
-                  onPress={() => {
-                    if (selectedBrand) setModelOpen(!modelOpen);
-                  }}
-                >
-                  <Text className={selectedModel ? "text-slate-900 font-bold" : "text-slate-400"}>
-                    {selectedModel || "Model"}
-                  </Text>
-                  <Feather name={modelOpen ? "chevron-up" : "chevron-down"} size={18} color="#94A3B8" />
-                </TouchableOpacity>
-
-                {modelOpen && selectedBrand && (
-                  <View className="bg-white border border-slate-200 rounded-2xl max-h-40 mt-2 shadow-sm overflow-hidden">
-                    <ScrollView nestedScrollEnabled>
-                      {selectedBrand.model && selectedBrand.model.map((m, idx) => (
-                        <TouchableOpacity
-                          key={idx}
-                          className="px-5 py-3 border-b border-slate-50"
-                          onPress={() => {
-                            setSelectedModel(m);
-                            setModelOpen(false);
-                          }}
-                        >
-                          <Text className="text-slate-700 font-bold">{m}</Text>
-                        </TouchableOpacity>
-                      ))}
-                    </ScrollView>
-                  </View>
-                )}
+              {/* Models Column */}
+              <View className="flex-1 bg-slate-50 border-2 border-slate-200 rounded-2xl p-3">
+                <Text className="text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-2">
+                  Models
+                </Text>
+                <ScrollView nestedScrollEnabled showsVerticalScrollIndicator={false}>
+                  {selectedBrand ? (
+                    <View className="flex-row flex-wrap gap-2">
+                      {selectedBrand.model &&
+                        selectedBrand.model.map((m, idx) => (
+                          <TouchableOpacity
+                            key={idx}
+                            className={`px-3 py-1.5 rounded-full border ${selectedModel === m
+                              ? "bg-rose-600 border-rose-600"
+                              : "bg-white border-slate-200"
+                              }`}
+                            onPress={() => setSelectedModel(m)}
+                          >
+                            <Text
+                              className={`font-bold text-xs ${selectedModel === m
+                                ? "text-white"
+                                : "text-slate-600"
+                                }`}
+                            >
+                              {m}
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                    </View>
+                  ) : (
+                    <View className="flex-1 items-center justify-center pt-10">
+                      <Text className="text-slate-400 text-xs text-center font-medium">
+                        Select a brand
+                      </Text>
+                    </View>
+                  )}
+                </ScrollView>
               </View>
             </View>
 
@@ -431,7 +451,13 @@ const AddProduct = () => {
               className={`rounded-xl py-3 items-center ${selectedBrand && selectedModel ? "bg-slate-900" : "bg-slate-200"
                 }`}
             >
-              <Text className={selectedBrand && selectedModel ? "text-white font-bold" : "text-slate-400 font-bold"}>
+              <Text
+                className={
+                  selectedBrand && selectedModel
+                    ? "text-white font-bold"
+                    : "text-slate-400 font-bold"
+                }
+              >
                 + Add Vehicle
               </Text>
             </TouchableOpacity>
@@ -439,8 +465,8 @@ const AddProduct = () => {
 
           {/* Description */}
           <View>
-            <Text className="text-slate-500 font-bold text-xs uppercase tracking-wider mb-2 ml-1">
-              Description
+            <Text className="text-red-500 font-bold text-xs uppercase tracking-wider mb-2 ml-1">
+              Description <Text className="text-red-500">*</Text>
             </Text>
             <TextInput
               value={description}
@@ -448,7 +474,7 @@ const AddProduct = () => {
               placeholder="Detailed description of the product."
               placeholderTextColor="#94A3B8"
               multiline
-              numberOfLines={4}
+              numberOfLines={5}
               className="bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-4 text-slate-900 text-base font-medium"
               style={{ textAlignVertical: "top" }}
             />
@@ -457,8 +483,12 @@ const AddProduct = () => {
           {/* Featured Toggle */}
           <View className="flex-row justify-between items-center bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-4">
             <View>
-              <Text className="text-slate-900 font-bold text-base">Featured Product</Text>
-              <Text className="text-slate-500 text-xs mt-1">Show this product on the home screen</Text>
+              <Text className="text-slate-900 font-bold text-base">
+                Featured Product
+              </Text>
+              <Text className="text-slate-500 text-xs mt-1">
+                Show this product on the home screen
+              </Text>
             </View>
             <Switch
               value={isFeatured}

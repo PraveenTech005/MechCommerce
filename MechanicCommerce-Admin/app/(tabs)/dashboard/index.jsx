@@ -57,17 +57,11 @@ const Dashboard = () => {
     <>
       <ScrollView className="flex-1 bg-slate-50 px-5 pt-5">
         <View className="flex-row justify-between items-center py-4">
-          <View>
+          <View className="w-[45%] gap-2">
             <Text className="text-2xl px-1 font-bold">Welcome Back</Text>
             <Text className="text-3xl font-bold">{user?.name}</Text>
           </View>
           <View className="flex flex-row justify-center items-center gap-x-5">
-            <Ionicons
-              name="notifications-outline"
-              size={22}
-              color="#0F172A"
-              className="bg-white p-3 rounded-full border border-slate-200 shadow-sm"
-            />
             <TouchableOpacity onPress={() => refreshData()}>
               <FontAwesome
                 name="refresh"
