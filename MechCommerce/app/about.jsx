@@ -5,6 +5,12 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
 const About = () => {
+  const WHY_US = [
+    { logo: "✅", head: "Genuine Parts", desc: "100% original spare parts" },
+    { logo: "🛒", head: "Easy Shopping", desc: "Smooth & Simple UI" },
+    { logo: "🔐", head: "Secure Login", desc: "Safe Authentication" },
+    { logo: "⚡", head: "Fast Delivery", desc: "Quick order processing" },
+  ];
   return (
     <SafeAreaView className="flex-1">
       <View className="flex flex-row items-center justify-between">
@@ -95,6 +101,24 @@ const About = () => {
         <View>
           <Text>🔧 MechPro Tools</Text>
           <Text>Powering Mechanics. Driving Trust.</Text>
+        </View>
+
+        {/* ── Why Choose Us ── */}
+        <Text className="mx-4 mt-2 mb-3 text-lg font-bold text-gray-900">Why MechPro?</Text>
+        <View className="mx-4 mb-8 gap-y-3">
+          {WHY_US.map((item, i) => (
+            <View
+              key={i}
+              className="flex-row items-center gap-x-4 rounded-xl px-4 py-3"
+              style={{ backgroundColor: "#FFFFFF" }}
+            >
+              <Text className="text-2xl">{item.logo}</Text>
+              <View>
+                <Text className="font-bold text-gray-900">{item.head}</Text>
+                <Text style={{ color: "#6B7280" }} className="text-sm">{item.desc}</Text>
+              </View>
+            </View>
+          ))}
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -95,27 +95,27 @@ const verifyUser = async (req, res) => {
   }
 };
 
-const getProfile = async (req, res) => {
-  try {
-    const user = await User.findById(req.user._id);
+// const getProfile = async (req, res) => {
+//   try {
+//     const user = await User.findById(req.user._id);
 
-    if (user) {
-      res.json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        address: user.address,
-        role: user.role,
-      });
-    } else {
-      res.status(404).json({ message: "User not found" });
-    }
-  } catch (error) {
-    console.error("Error fetching profile:", error.message);
-    res.status(500).json({ message: "Server error" });
-  }
-};
+//     if (user) {
+//       res.json({
+//         _id: user._id,
+//         name: user.name,
+//         email: user.email,
+//         phone: user.phone,
+//         address: user.address,
+//         role: user.role,
+//       });
+//     } else {
+//       res.status(404).json({ message: "User not found" });
+//     }
+//   } catch (error) {
+//     console.error("Error fetching profile:", error.message);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
 
 const getAllUsers = async (req, res) => {
   try {
@@ -168,7 +168,7 @@ module.exports = {
   register,
   login,
   verifyUser,
-  getProfile,
+  // getProfile,
   getAllUsers,
   updateUserRole,
   deleteUser,

@@ -4,6 +4,7 @@ import Toast from "react-native-toast-message";
 import { CartProvider } from "../context/CartContext";
 import { useEffect } from "react";
 import axios from "axios";
+import { AppContext, AppProvider } from "../context/AppContext";
 
 const RootLayout = () => {
   useEffect(() => {
@@ -25,25 +26,27 @@ const RootLayout = () => {
     WakeServer();
   }, []);
   return (
-    <CartProvider>
-      <Stack
-        initialRouteName="onboarding"
-        screenOptions={{ headerShown: false }}
-      >
-        <Stack.Screen name="onboarding" />
-        <Stack.Screen name="login" />
-        <Stack.Screen name="signup" />
-        <Stack.Screen name="home" />
-        <Stack.Screen name="products" />
-        <Stack.Screen name="productDetail" />
-        <Stack.Screen name="cart" />
-        <Stack.Screen name="searchPage" />
-        <Stack.Screen name="menu" />
-        <Stack.Screen name="profile" />
-        <Stack.Screen name="about" />
-      </Stack>
-      <Toast />
-    </CartProvider>
+    <AppProvider>
+      <CartProvider>
+        <Stack
+          initialRouteName="onboarding"
+          screenOptions={{ headerShown: false }}
+        >
+          <Stack.Screen name="onboarding" />
+          <Stack.Screen name="login" />
+          <Stack.Screen name="signup" />
+          <Stack.Screen name="home" />
+          <Stack.Screen name="products" />
+          <Stack.Screen name="productDetail" />
+          <Stack.Screen name="cart" />
+          <Stack.Screen name="searchPage" />
+          <Stack.Screen name="menu" />
+          <Stack.Screen name="profile" />
+          <Stack.Screen name="about" />
+        </Stack>
+        <Toast />
+      </CartProvider>
+    </AppProvider>
   );
 };
 

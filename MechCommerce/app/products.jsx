@@ -8,22 +8,26 @@ import {
 import { useMemo, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
-import products from "../seed";
+import products, { CATEGORY_PLACEHOLDERS } from "../seed";
+
+const DEFAULT_PLACEHOLDERS = [
+  "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=500",
+];
 import { router, useLocalSearchParams } from "expo-router";
 import { useCart } from "../context/CartContext";
 import Toast from "react-native-toast-message";
 
 const CATEGORY_TABS = [
-  { key: "", label: "All" },
-  { key: "bike", label: "Bike" },
-  { key: "car", label: "Car" },
-  { key: "engine", label: "Engine" },
-  { key: "accessories", label: "Accessories" },
+  { key: "All", label: "All" },
+  { key: "Bike", label: "Bike" },
+  { key: "Car", label: "Car" },
+  { key: "Engine", label: "Engine" },
+  { key: "Accessories", label: "Accessories" },
 ];
 
 const Products = () => {
   const { brand, model, category: paramCategory } = useLocalSearchParams();
-  const [activeCategory, setActiveCategory] = useState(paramCategory ?? "");
+  const [activeCategory, setActiveCategory] = useState(paramCategory || "All");
   const { addToCart, cartCount } = useCart();
 
   const filtered = useMemo(() => {
@@ -32,12 +36,12 @@ const Products = () => {
     // Vehicle filter
     if (brand && model) {
       list = list.filter((p) =>
-        p.vehicle.some((v) => v.name === brand && v.model === model),
+        p.vehicle.some((v) => v.brand === brand && v.model.includes(model)),
       );
     }
 
     // Category filter
-    if (activeCategory) {
+    if (activeCategory && activeCategory !== "All") {
       list = list.filter((p) => p.category === activeCategory);
     }
 
@@ -46,7 +50,7 @@ const Products = () => {
 
   const isCompatible = (product) => {
     if (!brand || !model) return false;
-    return product.vehicle.some((v) => v.name === brand && v.model === model);
+    return product.vehicle.some((v) => v.brand === brand && v.model.includes(model));
   };
 
   const handleAdd = (product) => {
@@ -132,59 +136,82 @@ const Products = () => {
             </Text>
           </View>
         ) : (
-          <View className="gap-y-3 pb-6">
-            {filtered.map((item) => {
+          <View className="w-full flex-row flex-wrap justify-between gap-y-4 pb-6">
+            {filtered.map((item, i) => {
               const compat = isCompatible(item);
               return (
                 <TouchableOpacity
-                  key={item.id}
+                  key={item._id || i}
                   onPress={() =>
-                    router.push({ pathname: "/productDetail", params: { id: item.id } })
+                    router.push({ pathname: "/productDetail", params: { id: item._id, brand, model } })
                   }
-                  className="flex-row items-center rounded-2xl overflow-hidden"
-                  style={{ backgroundColor: "#FFFFFF" }}
+                  activeOpacity={0.7}
+                  className="w-[48%] rounded-3xl bg-white border border-slate-200 p-2 overflow-hidden shadow-sm"
                 >
-                  <Image
-                    source={item.image}
-                    className="h-28 w-28"
-                    resizeMode="cover"
-                  />
-                  <View className="flex-1 px-3 py-3">
+                  <View className="relative w-full aspect-square rounded-2xl overflow-hidden bg-slate-100 mb-3">
+                    <Image
+                      source={{
+                        uri: item.images && item.images.length > 0
+                          ? item.images[i % item.images.length]
+                          : (item.category && CATEGORY_PLACEHOLDERS[item.category]
+                            ? CATEGORY_PLACEHOLDERS[item.category][i % 4]
+                            : DEFAULT_PLACEHOLDERS[0])
+                      }}
+                      className="w-full h-full"
+                      resizeMode="cover"
+                    />
                     {compat && (
-                      <View
-                        className="self-start rounded-full px-2 py-0.5 mb-1"
-                        style={{ backgroundColor: "#064E3B" }}
-                      >
-                        <Text style={{ color: "#34D399" }} className="text-xs font-semibold">
+                      <View className="absolute top-2 left-2 bg-[#064E3B]/90 px-2 py-1 rounded-md backdrop-blur-sm">
+                        <Text className="text-[#34D399] text-[10px] font-bold tracking-wider">
                           ✓ Compatible
                         </Text>
                       </View>
                     )}
-                    <Text className="text-gray-900 font-semibold" numberOfLines={2}>
-                      {item.name}
-                    </Text>
-                    <Text
-                      style={{ color: "#6B7280" }}
-                      className="text-xs capitalize mt-0.5 mb-1"
-                    >
-                      {item.category}
-                    </Text>
-                    <Text style={{ color: "#EF4444" }} className="font-bold text-base">
-                      ₹{item.price.toLocaleString()}
-                    </Text>
-                    {!item.stock && (
-                      <Text style={{ color: "#F59E0B" }} className="text-xs mt-0.5">
-                        Out of Stock
-                      </Text>
+                    {(!item.stock || item.stock === 0) && (
+                      <View className="absolute top-2 right-2 bg-rose-500/90 px-2 py-1 rounded-md backdrop-blur-sm">
+                        <Text className="text-white text-[10px] font-bold uppercase tracking-wider">
+                          Out of Stock
+                        </Text>
+                      </View>
                     )}
                   </View>
-                  <TouchableOpacity
-                    onPress={() => item.stock && handleAdd(item)}
-                    className="mr-3 rounded-xl p-3"
-                    style={{ backgroundColor: item.stock ? "#EF4444" : "#F3F4F6" }}
-                  >
-                    <FontAwesome name="cart-plus" size={18} color="#111827" />
-                  </TouchableOpacity>
+
+                  <View className="px-2 pb-2">
+                    <Text
+                      className="text-slate-900 font-bold text-base mb-1 tracking-tight"
+                      numberOfLines={1}
+                    >
+                      {item.name}
+                    </Text>
+
+                    <View className="flex-row justify-between items-center mb-3">
+                      <Text
+                        className="text-slate-500 text-xs font-medium"
+                        numberOfLines={1}
+                      >
+                        {item.category}
+                      </Text>
+                      <Text className="text-slate-400 text-xs font-medium">
+                        {item.stock} left
+                      </Text>
+                    </View>
+
+                    <View className="flex-row justify-between items-center mt-1">
+                      <Text className="text-rose-600 font-bold text-lg">
+                        ₹{item.price}
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() => item.stock && handleAdd(item)}
+                        className="p-1.5 rounded-full border"
+                        style={{
+                          borderColor: item.stock ? "#EF4444" : "#E2E8F0",
+                          backgroundColor: item.stock ? "#EF4444" : "#F8FAFC",
+                        }}
+                      >
+                        <FontAwesome name="cart-plus" size={14} color={item.stock ? "white" : "#94A3B8"} />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
                 </TouchableOpacity>
               );
             })}

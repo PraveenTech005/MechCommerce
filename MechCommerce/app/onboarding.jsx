@@ -1,12 +1,18 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { AntDesign, Entypo } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import mechanic from "../assets/icon.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
+import axios from "axios";
+import { AppContext } from "../context/AppContext";
+import Toast from "react-native-toast-message";
 
 const Onboarding = () => {
+
+  const { setUser } = useContext(AppContext)
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -14,13 +20,36 @@ const Onboarding = () => {
         const User = storedUser ? JSON.parse(storedUser) : null;
 
         if (User && User.token) {
-          setUser(User);
+          const res = await axios.get(
+            `${process.env.EXPO_PUBLIC_API_SERVER}/user/verify`,
+            {
+              headers: {
+                Authorization: `Bearer ${User.token}`,
+              },
+            },
+          );
+
+          if (!res.data)
+            return Toast.show({
+              type: "error",
+              text1: "Server Unreachable",
+            });
+
+          if (!res.data.isValid)
+            return Toast.show({
+              type: "error",
+              text1: "Login Expired",
+            });
+
+          setUser({ ...res.data.isValid, token: User.token });
           Toast.show({
-            type: `Welcome back ${User.name}`,
-            text1: `Logged in as ${User.email}`,
+            type: "success",
+            text1: `Welcome back ${User.name}`,
+            text2: `Logged in as ${User.email}`,
           });
-          router.replace("/(tabs)");
+          router.replace("/home");
         }
+        // Otherwise, do nothing and let them see the onboarding screen!
       } catch (error) {
         console.error("Error fetching user:", error);
       }

@@ -1,415 +1,609 @@
-import bike1 from './assets/images/bike1.jpg';
-import bike2 from './assets/images/bike2.jpg';
-import bike3 from './assets/images/bike3.jpg';
-import bike4 from './assets/images/bike4.jpg';
-import bike5 from './assets/images/bike5.jpg';
-import bike6 from './assets/images/bike6.jpg';
-import car1 from './assets/images/car1.jpg';
-import car2 from './assets/images/car2.jpg';
-import car3 from './assets/images/car3.jpg';
-import car4 from './assets/images/car4.jpg';
-import car5 from './assets/images/car5.jpg';
-import car6 from './assets/images/car6.jpg';
-import eng1 from './assets/images/eng1.jpg';
-import eng2 from './assets/images/eng2.jpg';
-import eng3 from './assets/images/eng3.jpg';
-import eng4 from './assets/images/eng4.jpg';
-import eng5 from './assets/images/eng5.jpg';
-import eng6 from './assets/images/eng6.jpg';
-import acc1 from './assets/images/acc1.jpg';
-import acc2 from './assets/images/acc2.jpg';
-import acc3 from './assets/images/acc3.jpg';
-import acc4 from './assets/images/acc4.jpg';
-import acc5 from './assets/images/acc5.jpg';
-import acc6 from './assets/images/acc6.jpg';
+
 
 const products = [
-  // ── BIKE PARTS ──────────────────────────────────────────────────
   {
-    id: 1,
-    name: 'Brake Cable',
-    category: 'bike',
-    price: 499,
-    image: bike1,
-    description: 'High-tensile steel brake cable compatible with most sport and commuter bikes. Ensures sharp, responsive braking.',
-    stock: true,
-    vehicle: [
-      { name: 'Yamaha', model: 'R15 V3' },
-      { name: 'Yamaha', model: 'MT-15' },
-      { name: 'Honda', model: 'CBR 150R' },
+    "_id": "69fc5910f87dd69dc5aa47f0",
+    "name": "Bike Brake Pads",
+    "price": 800,
+    "category": "Bike",
+    "vehicle": [
+      {
+        "brand": "Honda",
+        "model": [
+          "Shine",
+          "SP 125"
+        ],
+        "_id": "69fc5910f87dd69dc5aa47f1"
+      }
     ],
+    "images": [],
+    "description": "Durable brake pads for commuter bikes",
+    "stock": 50,
+    "isFeatured": false
   },
   {
-    id: 2,
-    name: 'Drive Chain',
-    category: 'bike',
-    price: 899,
-    image: bike2,
-    description: 'O-ring sealed drive chain with anti-rust coating. Fits 428/520 pitch sprockets for smooth power transfer.',
-    stock: true,
-    vehicle: [
-      { name: 'Yamaha', model: 'R15 V3' },
-      { name: 'Yamaha', model: 'FZ-S V3' },
-      { name: 'Bajaj', model: 'Pulsar NS200' },
+    "_id": "69fc5986f87dd69dc5aa47f4",
+    "name": "Royal Enfield Chain Set",
+    "price": 2200,
+    "category": "Bike",
+    "vehicle": [
+      {
+        "brand": "Royal Enfield",
+        "model": [
+          "Classic 350",
+          "Bullet 350"
+        ],
+        "_id": "69fc5986f87dd69dc5aa47f5"
+      }
     ],
+    "images": [],
+    "description": "Heavy-duty chain set for long rides",
+    "stock": 30,
+    "isFeatured": true
   },
   {
-    id: 3,
-    name: 'Wing Mirror Set',
-    category: 'bike',
-    price: 299,
-    image: bike3,
-    description: 'Universal motorcycle wing mirror set with wide-angle convex glass. Easy bolt-on installation.',
-    stock: true,
-    vehicle: [
-      { name: 'Honda', model: 'CB Shine' },
-      { name: 'Hero', model: 'Splendor Plus' },
-      { name: 'TVS', model: 'Apache RTR 160' },
+    "_id": "69fc59c7f87dd69dc5aa47f8",
+    "name": "Yamaha Clutch Plate",
+    "price": 1500,
+    "category": "Bike",
+    "vehicle": [
+      {
+        "brand": "Yamaha",
+        "model": [
+          "R15 V4",
+          "MT 15 V2"
+        ],
+        "_id": "69fc59c7f87dd69dc5aa47f9"
+      }
     ],
+    "images": [],
+    "description": "OEM clutch plate for smooth gear shifts",
+    "stock": 40,
+    "isFeatured": false
   },
   {
-    id: 4,
-    name: 'Comfort Seat',
-    category: 'bike',
-    price: 1299,
-    image: bike4,
-    description: 'Ergonomically designed foam seat with weather-resistant vinyl cover. Reduces vibration fatigue on long rides.',
-    stock: true,
-    vehicle: [
-      { name: 'Bajaj', model: 'Pulsar NS200' },
-      { name: 'KTM', model: 'Duke 200' },
-      { name: 'KTM', model: 'Duke 390' },
+    "_id": "69fc5e57f87dd69dc5aa4808",
+    "name": "TVS Apache Disc Rotor",
+    "price": 1800,
+    "category": "Bike",
+    "vehicle": [
+      {
+        "brand": "TVS",
+        "model": [
+          "Apache RTR 160",
+          "Raider 125",
+          "Ronin"
+        ],
+        "_id": "69fc5e57f87dd69dc5aa4809"
+      }
     ],
+    "images": [],
+    "description": "Front disc rotor for TVS Apache series",
+    "stock": 25,
+    "isFeatured": false
   },
   {
-    id: 5,
-    name: 'Handlebar Grip Set',
-    category: 'bike',
-    price: 699,
-    image: bike5,
-    description: 'Anti-vibration rubber handlebar grips with knurled pattern for secure control in all weather conditions.',
-    stock: false,
-    vehicle: [
-      { name: 'Yamaha', model: 'MT-15' },
-      { name: 'Yamaha', model: 'FZ-S V3' },
-      { name: 'Honda', model: 'CB Shine' },
-      { name: 'Hero', model: 'Splendor Plus' },
+    "_id": "69fc5e97f87dd69dc5aa480c",
+    "name": "Hero Splendor Headlight",
+    "price": 950,
+    "category": "Bike",
+    "vehicle": [
+      {
+        "brand": "Hero",
+        "model": [
+          "Splendor Plus",
+          "HF Deluxe",
+          "Glamour"
+        ],
+        "_id": "69fc5e97f87dd69dc5aa480d"
+      }
     ],
+    "images": [],
+    "description": "Bright halogen headlight for Hero commuter bikes",
+    "stock": 60,
+    "isFeatured": false
   },
   {
-    id: 6,
-    name: 'Full-face Helmet',
-    category: 'bike',
-    price: 1999,
-    image: bike6,
-    description: 'ISI-certified full-face helmet with aerodynamic shell, anti-scratch visor, and ventilation ducts.',
-    stock: true,
-    vehicle: [
-      { name: 'Yamaha', model: 'R15 V3' },
-      { name: 'Honda', model: 'CBR 150R' },
-      { name: 'KTM', model: 'Duke 200' },
-      { name: 'KTM', model: 'Duke 390' },
-      { name: 'Bajaj', model: 'Pulsar NS200' },
+    "_id": "69fc5ec6f87dd69dc5aa4810",
+    "name": "Maruti Suzuki Air Filter",
+    "price": 1200,
+    "category": "Car",
+    "vehicle": [
+      {
+        "brand": "Maruti Suzuki",
+        "model": [
+          "Swift",
+          "Baleno"
+        ],
+        "_id": "69fc5ec6f87dd69dc5aa4811"
+      }
     ],
+    "images": [],
+    "description": "OEM air filter for Maruti hatchbacks",
+    "stock": 70,
+    "isFeatured": false
   },
+  {
+    "_id": "69fc5efbf87dd69dc5aa4814",
+    "name": "Tata Nexon Brake Disc",
+    "price": 3500,
+    "category": "Car",
+    "vehicle": [
+      {
+        "brand": "Tata Motors",
+        "model": [
+          "Nexon",
+          "Harrier"
+        ],
+        "_id": "69fc5f7df87dd69dc5aa482f"
+      }
+    ],
+    "images": [],
+    "description": "Front brake disc for Tata SUVs",
+    "stock": 20,
+    "isFeatured": true,
+    "createdAt": {
+      "$date": "2026-05-07T09:44:27.977Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-07T09:46:37.828Z"
+    },
+    "__v": 1
+  },
+  {
+    "_id": "69fc5f6ff87dd69dc5aa4829",
+    "name": "Hyundai Creta Shock Absorber",
+    "price": 4200,
+    "category": "Car",
+    "vehicle": [
+      {
+        "brand": "Hyundai",
+        "model": [
+          "Creta",
+          "Venue"
+        ],
+        "_id": "69fc5f6ff87dd69dc5aa482a"
+      }
+    ],
+    "images": [],
+    "description": "Rear shock absorber for Hyundai SUVs",
+    "stock": 15,
+    "isFeatured": false
+  },
+  {
+    "_id": "69fc6013f87dd69dc5aa4832",
+    "name": "Mahindra Thar Clutch Kit",
+    "price": 5500,
+    "category": "Car",
+    "vehicle": [
+      {
+        "brand": "Mahindra",
+        "model": [
+          "Thar",
+          "Scorpio N"
+        ],
+        "_id": "69fc6013f87dd69dc5aa4833"
+      }
+    ],
+    "images": [],
+    "description": "Heavy-duty clutch kit for Mahindra off-roaders",
+    "stock": 10,
+    "isFeatured": true
+  },
+  {
+    "_id": "69fc604ef87dd69dc5aa4836",
+    "name": "Toyota Innova Fuel Pump",
+    "price": 4800,
+    "category": "Car",
+    "vehicle": [
+      {
+        "brand": "Toyota",
+        "model": [
+          "Innova Hycross",
+          "Fortuner",
+          "Urban Cruiser Hyryder"
+        ],
+        "_id": "69fc604ef87dd69dc5aa4837"
+      }
+    ],
+    "images": [],
+    "description": "Reliable fuel pump for Toyota MPVs",
+    "stock": 12,
+    "isFeatured": false
+  },
+  {
+    "_id": "69fc60bcf87dd69dc5aa484b",
+    "name": "Bike Mobile Holder",
+    "price": 600,
+    "category": "Accessories",
+    "vehicle": [
+      {
+        "brand": "Universal",
+        "model": [
+          "Bikes"
+        ],
+        "_id": "69fc60bcf87dd69dc5aa484c"
+      }
+    ],
+    "images": [],
+    "description": "Sturdy mobile holder for bikes",
+    "stock": 100,
+    "isFeatured": true
+  },
+  {
+    "_id": "69fc6120f87dd69dc5aa484f",
+    "name": "Car Seat Covers",
+    "price": 2500,
+    "category": "Accessories",
+    "vehicle": [
+      {
+        "brand": "Maruti Suzuki",
+        "model": [
+          "Swift",
+          "Ertiga"
+        ],
+        "_id": "69fc6120f87dd69dc5aa4850"
+      },
+      {
+        "brand": "Tata Motors",
+        "model": [
+          "Nexon",
+          "Harrier"
+        ],
+        "_id": "69fc6120f87dd69dc5aa4851"
+      },
+      {
+        "brand": "Hyundai",
+        "model": [
+          "i20"
+        ],
+        "_id": "69fc6120f87dd69dc5aa4852"
+      },
+      {
+        "brand": "Kia",
+        "model": [
+          "Carens",
+          "Sonet"
+        ],
+        "_id": "69fc6120f87dd69dc5aa4853"
+      }
+    ],
+    "images": [],
+    "description": "Premium seat covers for comfort and style",
+    "stock": 40,
+    "isFeatured": false
+  },
+  {
+    "_id": "69fc614af87dd69dc5aa4856",
+    "name": "Bike Riding Gloves",
+    "price": 900,
+    "category": "Accessories",
+    "vehicle": [
+      {
+        "brand": "Universal",
+        "model": [
+          "Bikes"
+        ],
+        "_id": "69fc614af87dd69dc5aa4857"
+      }
+    ],
+    "images": [],
+    "description": "Protective gloves for safe riding",
+    "stock": 80,
+    "isFeatured": false
+  },
+  {
+    "_id": "69fc6188f87dd69dc5aa485a",
+    "name": "Car Floor Mats",
+    "price": 1800,
+    "category": "Accessories",
+    "vehicle": [
+      {
+        "brand": "Hyundai",
+        "model": [
+          "i20",
+          "Creta"
+        ],
+        "_id": "69fc6188f87dd69dc5aa485b"
+      },
+      {
+        "brand": "Toyota",
+        "model": [
+          "Fortuner"
+        ],
+        "_id": "69fc6188f87dd69dc5aa485c"
+      },
+      {
+        "brand": "Mahindra",
+        "model": [
+          "Bolero"
+        ],
+        "_id": "69fc6188f87dd69dc5aa485d"
+      }
+    ],
+    "images": [],
+    "description": "Waterproof mats for clean interiors",
+    "stock": 50,
+    "isFeatured": false
+  },
+  {
+    "_id": "69fc61b7f87dd69dc5aa4860",
+    "name": "Bike Helmet",
+    "price": 1500,
+    "category": "Accessories",
+    "vehicle": [
+      {
+        "brand": "Universal",
+        "model": [
+          "Bikes"
+        ],
+        "_id": "69fc61b7f87dd69dc5aa4861"
+      }
+    ],
+    "images": [],
+    "description": "ISI certified helmet for rider safety",
+    "stock": 32,
+    "isFeatured": true
+  },
+  {
+    "_id": "69fc6229f87dd69dc5aa4864",
+    "name": "Bike Spark Plug",
+    "price": 350,
+    "category": "Engine",
+    "vehicle": [
+      {
+        "brand": "Bajaj",
+        "model": [
+          "Pulsar N160",
+          "Dominar 400"
+        ],
+        "_id": "69fc6229f87dd69dc5aa4865"
+      }
+    ],
+    "images": [],
+    "description": "High performance spark plug for Bajaj bikes",
+    "stock": 200,
+    "isFeatured": false
+  },
+  {
+    "_id": "69fc6276f87dd69dc5aa4868",
+    "name": "Car Engine Oil",
+    "price": 700,
+    "category": "Engine",
+    "vehicle": [
+      {
+        "brand": "Universal",
+        "model": [
+          "Cars"
+        ],
+        "_id": "69fc6276f87dd69dc5aa4869"
+      }
+    ],
+    "images": [],
+    "description": "OEM oil for cars",
+    "stock": 90,
+    "isFeatured": false
+  },
+  {
+    "_id": "69fc63fef87dd69dc5aa488b",
+    "name": "Bike Piston Kit",
+    "price": 2500,
+    "category": "Engine",
+    "vehicle": [
+      {
+        "brand": "Yamaha",
+        "model": [
+          "R15 V4",
+          "FZ-S"
+        ],
+        "_id": "69fc63fef87dd69dc5aa488c"
+      }
+    ],
+    "images": [],
+    "description": "Complete piston kit for Yamaha performance bikes",
+    "stock": 25,
+    "isFeatured": true
+  },
+  {
+    "_id": "69fc6448f87dd69dc5aa488f",
+    "name": "Car Timing Belt",
+    "price": 3200,
+    "category": "Engine",
+    "vehicle": [
+      {
+        "brand": "Tata Motors",
+        "model": [
+          "Punch",
+          "Nexon"
+        ],
+        "_id": "69fc6448f87dd69dc5aa4890"
+      }
+    ],
+    "images": [],
+    "description": "Durable timing belt for Tata cars",
+    "stock": 30,
+    "isFeatured": false
+  },
+  {
+    "_id": "69fc6477f87dd69dc5aa4893",
+    "name": "Bike Carburetor",
+    "price": 2800,
+    "category": "Engine",
+    "vehicle": [
+      {
+        "brand": "Hero",
+        "model": [
+          "Splendor Plus",
+          "Glamour"
+        ],
+        "_id": "69fc6477f87dd69dc5aa4894"
+      }
+    ],
+    "images": [],
+    "description": "OEM carburetor for Hero commuter bikes",
+    "stock": 35,
+    "isFeatured": false
+  }
+]
 
-  // ── CAR PARTS ───────────────────────────────────────────────────
+export const vehicleCatalog = [
   {
-    id: 7,
-    name: 'Oil Filter',
-    category: 'car',
-    price: 699,
-    image: car1,
-    description: 'Premium spin-on oil filter with anti-drain back valve. Removes 99% of engine contaminants for longer engine life.',
-    stock: true,
-    vehicle: [
-      { name: 'Maruti', model: 'Swift' },
-      { name: 'Maruti', model: 'Baleno' },
-      { name: 'Hyundai', model: 'i20' },
-    ],
+    "_id": "69fa031a1625b346d6464bbc",
+    "brand": "Royal Enfield",
+    "model": [
+      "Classic 350",
+      "Bullet 350",
+      "Hunter 350",
+      "Continental GT 650"
+    ]
   },
   {
-    id: 8,
-    name: 'Ceramic Brake Pad',
-    category: 'car',
-    price: 1499,
-    image: car2,
-    description: 'Low-dust ceramic brake pads with chamfered and slotted design for reduced noise and fade resistance.',
-    stock: true,
-    vehicle: [
-      { name: 'Hyundai', model: 'Creta' },
-      { name: 'Kia', model: 'Seltos' },
-      { name: 'Tata', model: 'Nexon' },
-    ],
+    "_id": "69fa03511625b346d6464bcc",
+    "brand": "Honda",
+    "model": [
+      "SP 125",
+      "Shine",
+      "Activa 6G",
+      "CB350RS"
+    ]
   },
   {
-    id: 9,
-    name: 'Wiper Blades',
-    category: 'car',
-    price: 399,
-    image: car3,
-    description: 'Frameless beam wiper blades for streak-free visibility. Fits standard J-hook and pin-type arms.',
-    stock: true,
-    vehicle: [
-      { name: 'Maruti', model: 'Swift' },
-      { name: 'Maruti', model: 'Baleno' },
-      { name: 'Honda', model: 'City' },
-      { name: 'Hyundai', model: 'i20' },
-    ],
+    "_id": "69fa03821625b346d6464bdc",
+    "brand": "Yamaha",
+    "model": [
+      "R15 V4",
+      "MT 15 V2",
+      "FZ-S",
+      "XSR 155"
+    ]
   },
   {
-    id: 10,
-    name: 'Leatherette Seat Cover',
-    category: 'car',
-    price: 2499,
-    image: car4,
-    description: 'Custom-fit leatherette seat cover set with contrast stitching. Water-resistant and easy to clean.',
-    stock: true,
-    vehicle: [
-      { name: 'Hyundai', model: 'Creta' },
-      { name: 'Kia', model: 'Seltos' },
-      { name: 'Maruti', model: 'Swift' },
-    ],
+    "_id": "69fa03b51625b346d6464bec",
+    "brand": "TVS",
+    "model": [
+      "Apache RTR 160",
+      "Raider 125",
+      "Ronin",
+      "Jupiter"
+    ]
   },
   {
-    id: 11,
-    name: 'Car Battery 45Ah',
-    category: 'car',
-    price: 4999,
-    image: car5,
-    description: '45Ah maintenance-free SMF battery with superior cold-crank amps. Long service life of 48-60 months.',
-    stock: true,
-    vehicle: [
-      { name: 'Maruti', model: 'Swift' },
-      { name: 'Maruti', model: 'Baleno' },
-      { name: 'Honda', model: 'City' },
-      { name: 'Hyundai', model: 'i20' },
-      { name: 'Tata', model: 'Nexon' },
-    ],
+    "_id": "69fadccf027395b49ead443c",
+    "brand": "Hero",
+    "model": [
+      "Splendor Plus",
+      "HF Deluxe",
+      "Glamour",
+      "Xtreme 125R"
+    ]
   },
   {
-    id: 12,
-    name: 'Dual-tone Car Horn',
-    category: 'car',
-    price: 599,
-    image: car6,
-    description: 'High/low dual-tone electromagnetic horn. 120dB output, 12V, corrosion-resistant body.',
-    stock: false,
-    vehicle: [
-      { name: 'Honda', model: 'City' },
-      { name: 'Hyundai', model: 'i20' },
-      { name: 'Hyundai', model: 'Creta' },
-      { name: 'Tata', model: 'Nexon' },
-    ],
-  },
-
-  // ── ENGINE PARTS ────────────────────────────────────────────────
-  {
-    id: 13,
-    name: 'Iridium Spark Plug',
-    category: 'engine',
-    price: 299,
-    image: eng1,
-    description: 'Iridium-tipped spark plug for faster ignition, enhanced throttle response, and 20% better fuel economy.',
-    stock: true,
-    vehicle: [
-      { name: 'Yamaha', model: 'R15 V3' },
-      { name: 'Honda', model: 'CBR 150R' },
-      { name: 'Maruti', model: 'Swift' },
-      { name: 'Honda', model: 'City' },
-    ],
+    "_id": "69fadd09027395b49ead444c",
+    "brand": "Bajaj",
+    "model": [
+      "Pulsar N160",
+      "Pulsar NS200",
+      "Platina 110",
+      "Dominar 400"
+    ]
   },
   {
-    id: 14,
-    name: 'Forged Piston Kit',
-    category: 'engine',
-    price: 2499,
-    image: eng2,
-    description: 'High-compression forged aluminium piston kit with rings and wrist pin. STD bore size for direct fit.',
-    stock: true,
-    vehicle: [
-      { name: 'KTM', model: 'Duke 200' },
-      { name: 'Bajaj', model: 'Pulsar NS200' },
-    ],
+    "_id": "69fadd4c027395b49ead445c",
+    "brand": "Maruti Suzuki",
+    "model": [
+      "Swift",
+      "Baleno",
+      "Brezza",
+      "Ertiga"
+    ]
   },
   {
-    id: 15,
-    name: 'Clutch Plate Set',
-    category: 'engine',
-    price: 1899,
-    image: eng3,
-    description: 'OEM-grade multi-friction clutch plate set. Reduces slip and ensures smooth gear engagement.',
-    stock: true,
-    vehicle: [
-      { name: 'Yamaha', model: 'MT-15' },
-      { name: 'Yamaha', model: 'FZ-S V3' },
-      { name: 'Honda', model: 'CB Shine' },
-      { name: 'Bajaj', model: 'Pulsar NS200' },
-    ],
+    "_id": "69fae5cc027395b49ead4489",
+    "brand": "Tata Motors",
+    "model": [
+      "Punch",
+      "Nexon",
+      "Harrier",
+      "Sierra"
+    ]
   },
   {
-    id: 16,
-    name: 'Crankshaft Assembly',
-    category: 'engine',
-    price: 4599,
-    image: eng4,
-    description: 'Precision-balanced crankshaft assembly with main bearings. Reduces vibration and improves longevity.',
-    stock: false,
-    vehicle: [
-      { name: 'Hero', model: 'Splendor Plus' },
-      { name: 'Honda', model: 'CB Shine' },
-    ],
+    "_id": "69fae5ef027395b49ead4491",
+    "brand": "Hyundai",
+    "model": [
+      "Creta",
+      "Venue",
+      "i20",
+      "Verna"
+    ]
   },
   {
-    id: 17,
-    name: 'Cylinder Bore Kit',
-    category: 'engine',
-    price: 5299,
-    image: eng5,
-    description: 'Complete cylinder bore kit with honed finish. Ready to install with matching piston, rings, and gaskets.',
-    stock: true,
-    vehicle: [
-      { name: 'Bajaj', model: 'Pulsar NS200' },
-      { name: 'KTM', model: 'Duke 200' },
-      { name: 'KTM', model: 'Duke 390' },
-    ],
+    "_id": "69fae5fd027395b49ead4495",
+    "brand": "Mahindra",
+    "model": [
+      "Thar",
+      "Scorpio N",
+      "XUV700",
+      "Bolero"
+    ]
   },
   {
-    id: 18,
-    name: 'Synthetic Engine Oil 1L',
-    category: 'engine',
-    price: 999,
-    image: eng6,
-    description: 'Full-synthetic 10W-40 engine oil for four-stroke engines. API SL rated, reduces wear by up to 40%.',
-    stock: true,
-    vehicle: [
-      { name: 'Yamaha', model: 'R15 V3' },
-      { name: 'Yamaha', model: 'MT-15' },
-      { name: 'Yamaha', model: 'FZ-S V3' },
-      { name: 'Honda', model: 'CBR 150R' },
-      { name: 'Honda', model: 'CB Shine' },
-      { name: 'KTM', model: 'Duke 200' },
-      { name: 'KTM', model: 'Duke 390' },
-      { name: 'Bajaj', model: 'Pulsar NS200' },
-      { name: 'Hero', model: 'Splendor Plus' },
-      { name: 'TVS', model: 'Apache RTR 160' },
-    ],
-  },
-
-  // ── ACCESSORIES ─────────────────────────────────────────────────
-  {
-    id: 19,
-    name: 'ISI Open-face Helmet',
-    category: 'accessories',
-    price: 1499,
-    image: acc1,
-    description: 'ISI-certified open-face helmet with anti-UV visor and quick-release chin strap. Lightweight ABS shell.',
-    stock: true,
-    vehicle: [
-      { name: 'Hero', model: 'Splendor Plus' },
-      { name: 'TVS', model: 'Apache RTR 160' },
-      { name: 'Honda', model: 'CB Shine' },
-    ],
+    "_id": "69fae60d027395b49ead4499",
+    "brand": "Toyota",
+    "model": [
+      "Fortuner",
+      "Innova Hycross",
+      "Urban Cruiser Hyryder",
+      "Glanza"
+    ]
   },
   {
-    id: 20,
-    name: 'Riding Gloves',
-    category: 'accessories',
-    price: 499,
-    image: acc2,
-    description: 'Mesh riding gloves with knuckle protection and palm slider. Ventilated for all-season comfort.',
-    stock: true,
-    vehicle: [
-      { name: 'Yamaha', model: 'R15 V3' },
-      { name: 'KTM', model: 'Duke 200' },
-      { name: 'KTM', model: 'Duke 390' },
-      { name: 'Honda', model: 'CBR 150R' },
-    ],
+    "_id": "69fae61c027395b49ead449d",
+    "brand": "Kia",
+    "model": [
+      "Seltos",
+      "Sonet",
+      "Carens",
+      "EV6"
+    ]
   },
   {
-    id: 21,
-    name: 'Phone Mount Holder',
-    category: 'accessories',
-    price: 399,
-    image: acc3,
-    description: 'Universal handlebar phone mount with 360° rotation. Fits phones 4"–7". Vibration-dampening silicone arms.',
-    stock: true,
-    vehicle: [
-      { name: 'Yamaha', model: 'R15 V3' },
-      { name: 'Yamaha', model: 'MT-15' },
-      { name: 'Yamaha', model: 'FZ-S V3' },
-      { name: 'Honda', model: 'CBR 150R' },
-      { name: 'KTM', model: 'Duke 200' },
-      { name: 'KTM', model: 'Duke 390' },
-      { name: 'Bajaj', model: 'Pulsar NS200' },
-      { name: 'TVS', model: 'Apache RTR 160' },
-    ],
-  },
-  {
-    id: 22,
-    name: 'Neoprene Seat Cover',
-    category: 'accessories',
-    price: 899,
-    image: acc4,
-    description: 'Waterproof neoprene bike seat cover with anti-slip base. UV-stabilized to prevent fading.',
-    stock: false,
-    vehicle: [
-      { name: 'Hero', model: 'Splendor Plus' },
-      { name: 'Honda', model: 'CB Shine' },
-      { name: 'TVS', model: 'Apache RTR 160' },
-    ],
-  },
-  {
-    id: 23,
-    name: 'Bike Body Cover',
-    category: 'accessories',
-    price: 699,
-    image: acc5,
-    description: 'Silver heat-reflective dust cover with soft inner lining. Elastic hem for secure fit. All-weather protection.',
-    stock: true,
-    vehicle: [
-      { name: 'Yamaha', model: 'R15 V3' },
-      { name: 'Yamaha', model: 'MT-15' },
-      { name: 'Yamaha', model: 'FZ-S V3' },
-      { name: 'Honda', model: 'CBR 150R' },
-      { name: 'Honda', model: 'CB Shine' },
-      { name: 'KTM', model: 'Duke 200' },
-      { name: 'KTM', model: 'Duke 390' },
-      { name: 'Bajaj', model: 'Pulsar NS200' },
-      { name: 'Hero', model: 'Splendor Plus' },
-      { name: 'TVS', model: 'Apache RTR 160' },
-    ],
-  },
-  {
-    id: 24,
-    name: 'Premium Keychain',
-    category: 'accessories',
-    price: 199,
-    image: acc6,
-    description: 'Metal alloy keychain with brand emblem. Corrosion-resistant chrome finish.',
-    stock: true,
-    vehicle: [
-      { name: 'Yamaha', model: 'R15 V3' },
-      { name: 'Yamaha', model: 'MT-15' },
-      { name: 'KTM', model: 'Duke 200' },
-      { name: 'KTM', model: 'Duke 390' },
-      { name: 'Honda', model: 'CBR 150R' },
-    ],
-  },
+    "_id": "69fc5f16f87dd69dc5aa4819",
+    "brand": "Universal",
+    "model": [
+      "Bikes",
+      "Cars",
+      "Engines",
+      "Accessories"
+    ]
+  }
 ];
 
-// Derived vehicle catalog from products
-export const vehicleCatalog = {
-  Yamaha: ['R15 V3', 'MT-15', 'FZ-S V3'],
-  Honda: ['CBR 150R', 'CB Shine', 'City'],
-  KTM: ['Duke 200', 'Duke 390'],
-  Bajaj: ['Pulsar NS200'],
-  Hero: ['Splendor Plus'],
-  TVS: ['Apache RTR 160'],
-  Maruti: ['Swift', 'Baleno'],
-  Hyundai: ['i20', 'Creta'],
-  Kia: ['Seltos'],
-  Tata: ['Nexon'],
+export const CATEGORY_PLACEHOLDERS = {
+  Bike: [
+    "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=500",
+    "https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?q=80&w=500",
+    "https://images.unsplash.com/photo-1502744688674-c619d1586c9e?q=80&w=500",
+    "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=500",
+  ],
+  Car: [
+    "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=500",
+    "https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=500",
+    "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=500",
+    "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=500",
+  ],
+  Engine: [
+    "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=500",
+    "https://imgs.search.brave.com/2lodTy0u77NpkG4dNHWaik0GZFrbx4zHOPRHnNxO_zU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvNjcx/Nzk1NTcyL3Bob3Rv/L3Bvd2VyLWdlbmVy/YXRvci5qcGc_cz02/MTJ4NjEyJnc9MCZr/PTIwJmM9SHZXOEZU/MEllLTBzMGpEYkZH/dFNQY3ZSYVdVUWR3/WlVDcmtWaVhqOExx/dz0",
+    "https://imgs.search.brave.com/zSlCRnbiybg7AYfH-cG0dZvLdrRnD66EafFI3aBbT8U/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly90aHVt/YnMuZHJlYW1zdGlt/ZS5jb20vYi9jYXIt/cGFydHMtaXNvbGF0/ZWQtZW5naW5lLXdo/aXRlLTU5ODI1NTI1/LmpwZw",
+    "https://imgs.search.brave.com/XGTQj-RIhjhCAwN8CX7w21V1YzTD5pvfKNPQnD7cEfc/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wNzMv/NzY1LzM3Mi9zbWFs/bC9hdXRvbW90aXZl/LXBhcnRzLWFuZC10/b29scy1vbi13b3Jr/c2hvcC10YWJsZS1t/ZWNoYW5pY2FsLWVu/Z2luZWVyaW5nLXNl/cnZpY2UtYW5kLWNh/ci1yZXBhaXItZXF1/aXBtZW50LWNvbmNl/cHQtb2YtbWFpbnRl/bmFuY2UtYW5kLXRl/Y2hub2xvZ3ktcGhv/dG8uanBn"
+  ],
+  Accessories: [
+    "https://images.unsplash.com/photo-1542282088-fe8426682b8f?q=80&w=500",
+    "https://imgs.search.brave.com/VCa42_07zuSWafn-OE0MaRJxAAa7Q_ZyKy32QFhZTLs/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvOTA1/MjA1NTYwL3Bob3Rv/L2Jpa2UtYWNjZXNz/b3JpZXMtYmlrZS1o/ZWxtZXQtYmlrZS1n/bG92ZXMtZXllZ2xh/c3Nlcy1ib3R0bGUt/aW4taG9sZGVyLmpw/Zz9zPTYxMng2MTIm/dz0wJms9MjAmYz1s/d0pnTGNFVXVCLUx5/ZWZ4NkZBNzBnOVhy/bzBaenprajlhQ0JE/M3VOQlk4PQ",
+    "https://images.unsplash.com/photo-1583121274602-3e2820c69888?q=80&w=500",
+    "https://loremflickr.com/cache/resized/3279_5777073521_d6c262945f_c_500_500_nofilter.jpg",
+  ],
 };
 
 export default products;

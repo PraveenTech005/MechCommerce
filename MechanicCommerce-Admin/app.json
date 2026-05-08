@@ -32,8 +32,9 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "3b1daea7-70e5-464e-937d-205cb0650f2b"
+        "projectId": "aeb3b7a8-97ea-4b5e-ae20-5adf484a90b8"
       }
-    }
+    },
+    "owner": "praveentech"
   }
 }

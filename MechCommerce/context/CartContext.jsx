@@ -4,14 +4,13 @@ const CartContext = createContext(null);
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
-  const [selectedVehicle, setSelectedVehicle] = useState({ brand: '', model: '' });
 
   const addToCart = (product) => {
     setCart((prev) => {
-      const existing = prev.find((i) => i.product.id === product.id);
+      const existing = prev.find((i) => (i.product._id || i.product.id) === (product._id || product.id));
       if (existing) {
         return prev.map((i) =>
-          i.product.id === product.id ? { ...i, qty: i.qty + 1 } : i,
+          (i.product._id || i.product.id) === (product._id || product.id) ? { ...i, qty: i.qty + 1 } : i,
         );
       }
       return [...prev, { product, qty: 1 }];
@@ -19,13 +18,13 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeFromCart = (productId) => {
-    setCart((prev) => prev.filter((i) => i.product.id !== productId));
+    setCart((prev) => prev.filter((i) => (i.product._id || i.product.id) !== productId));
   };
 
   const updateQty = (productId, qty) => {
     if (qty < 1) return removeFromCart(productId);
     setCart((prev) =>
-      prev.map((i) => (i.product.id === productId ? { ...i, qty } : i)),
+      prev.map((i) => ((i.product._id || i.product.id) === productId ? { ...i, qty } : i)),
     );
   };
 
@@ -44,8 +43,6 @@ export const CartProvider = ({ children }) => {
         clearCart,
         cartCount,
         cartTotal,
-        selectedVehicle,
-        setSelectedVehicle,
       }}
     >
       {children}

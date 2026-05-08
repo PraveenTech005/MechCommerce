@@ -19,9 +19,9 @@ const Menu = () => {
         <Entypo name="cross" size={36} color="#111827" />
       </TouchableOpacity>
 
-      <View className="flex-1 justify-center gap-4 px-5">
+      <View className="flex-1 justify-start gap-4 px-5 pt-5">
         <TouchableOpacity
-          className="flex flex-row items-center gap-x-4 rounded-2xl p-4"
+          className="flex flex-row items-center gap-x-4 rounded-2xl p-4 border"
           style={{ backgroundColor: "#FFFFFF" }}
           onPress={() => router.replace("profile")}
         >
@@ -35,7 +35,7 @@ const Menu = () => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          className="flex flex-row items-center gap-x-4 rounded-2xl p-4"
+          className="flex flex-row items-center gap-x-4 rounded-2xl p-4 border"
           style={{ backgroundColor: "#FFFFFF" }}
           onPress={() => router.push("/cart")}
         >
@@ -55,7 +55,7 @@ const Menu = () => {
               </View>
             )}
           </View>
-          <Text className="text-lg font-semibold text-white">Cart</Text>
+          <Text className="text-lg font-semibold text-black">Cart</Text>
           {cartCount > 0 && (
             <View
               className="ml-auto rounded-full px-2 py-0.5"
@@ -67,7 +67,7 @@ const Menu = () => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          className="flex flex-row items-center gap-x-4 rounded-2xl p-4"
+          className="flex flex-row items-center gap-x-4 rounded-2xl p-4 border"
           style={{ backgroundColor: "#FFFFFF" }}
           onPress={() => router.replace("about")}
         >

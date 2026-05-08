@@ -3,7 +3,7 @@ const {
   register,
   login,
   verifyUser,
-  getProfile,
+  // getProfile,
   getAllUsers,
   updateUserRole,
   deleteUser,
@@ -24,7 +24,7 @@ router.post("/login", login);
 router.get("/verify", protect, verifyUser);
 
 // Protected route (Any logged-in user can access)
-router.get("/profile", protect, getProfile);
+// router.get("/profile", protect, getProfile);
 
 // Admin-only protected route
 router.get("/all", protect, authorize("admin"), getAllUsers);

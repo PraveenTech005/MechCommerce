@@ -11,23 +11,20 @@ import {
 import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import products, { vehicleCatalog } from "../seed";
+import products, { vehicleCatalog, CATEGORY_PLACEHOLDERS } from "../seed";
+
+const DEFAULT_PLACEHOLDERS = [
+  "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=500",
+];
 import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useCart } from "../context/CartContext";
 
 const CATEGORIES = [
-  { key: "bike", label: "Bike Parts", icon: "motorbike" },
-  { key: "car", label: "Car Parts", icon: "car" },
-  { key: "engine", label: "Engine", icon: "engine" },
-  { key: "accessories", label: "Accessories", icon: "shopping" },
-];
-
-const WHY_US = [
-  { logo: "✅", head: "Genuine Parts", desc: "100% original spare parts" },
-  { logo: "🛒", head: "Easy Shopping", desc: "Smooth & Simple UI" },
-  { logo: "🔐", head: "Secure Login", desc: "Safe Authentication" },
-  { logo: "⚡", head: "Fast Delivery", desc: "Quick order processing" },
+  { key: "Bike", label: "Bike Parts", icon: "motorbike" },
+  { key: "Car", label: "Car Parts", icon: "car" },
+  { key: "Engine", label: "Engine", icon: "engine" },
+  { key: "Accessories", label: "Accessories", icon: "shopping" },
 ];
 
 const Home = () => {
@@ -35,12 +32,13 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const [brandModal, setBrandModal] = useState(false);
   const [modelModal, setModelModal] = useState(false);
-  const { cartCount, selectedVehicle, setSelectedVehicle } = useCart();
+  const [selectedVehicle, setSelectedVehicle] = useState({ brand: '', model: '' });
+  const { cartCount } = useCart();
 
-  const brands = Object.keys(vehicleCatalog);
-  const models = selectedVehicle.brand ? vehicleCatalog[selectedVehicle.brand] : [];
+  const brands = vehicleCatalog.map(v => v.brand);
+  const models = selectedVehicle.brand ? vehicleCatalog.find(v => v.brand === selectedVehicle.brand)?.model || [] : [];
 
-  const featured = products.slice(0, 4);
+  const featured = products.filter((item) => item.isFeatured)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -59,7 +57,7 @@ const Home = () => {
   const isCompatible = (product) => {
     if (!selectedVehicle.brand || !selectedVehicle.model) return false;
     return product.vehicle.some(
-      (v) => v.name === selectedVehicle.brand && v.model === selectedVehicle.model,
+      (v) => v.brand === selectedVehicle.brand && v.model.includes(selectedVehicle.model)
     );
   };
 
@@ -98,7 +96,7 @@ const Home = () => {
             )}
           </TouchableOpacity>
           <TouchableOpacity onPress={() => router.push("/menu")}>
-            <Ionicons name="menu-outline" size={32} color="white" />
+            <Ionicons name="menu-outline" size={32} color="black" />
           </TouchableOpacity>
         </View>
       </View>
@@ -106,7 +104,7 @@ const Home = () => {
       {/* ── Search Bar ── */}
       <View className="flex flex-row items-center gap-x-2 px-5 py-2">
         <View
-          className="flex-1 flex-row items-center rounded-xl px-3"
+          className="flex-1 flex-row items-center rounded-xl px-3 border-2 border-slate-300"
           style={{ backgroundColor: "#FFFFFF" }}
         >
           <Feather name="search" size={18} color="#6B7280" />
@@ -145,15 +143,21 @@ const Home = () => {
           className="mx-4 mt-3 rounded-2xl p-5"
           style={{ backgroundColor: "#FFFFFF" }}
         >
-          <Text className="mb-1 text-lg font-bold text-gray-900">Find Parts for Your Vehicle</Text>
-          <Text style={{ color: "#6B7280" }} className="mb-4 text-sm">
-            Select your vehicle to see compatible parts
-          </Text>
+          <View className="flex flex-row justify-between items-center">
+            <View>
+              <Text className="mb-1 text-lg font-bold text-gray-900">Find Parts for Your Vehicle</Text>
+              <Text style={{ color: "#6B7280" }} className="mb-4 text-sm">
+                Select your vehicle to see compatible parts
+              </Text>
+            </View>
+            <TouchableOpacity onPress={() => setSelectedVehicle({ brand: '', model: '' })} className="rounded-xl px-4 py-3"><Text className="text-red-500 font-semibold">Clear</Text></TouchableOpacity>
+          </View>
+
 
           {/* Brand Picker */}
           <TouchableOpacity
             onPress={() => setBrandModal(true)}
-            className="mb-3 flex-row items-center justify-between rounded-xl px-4 py-3"
+            className="mb-3 flex-row items-center justify-between rounded-xl px-4 py-3 border-2 border-slate-300"
             style={{ backgroundColor: "#F3F4F6" }}
           >
             <View className="flex-row items-center gap-x-2">
@@ -168,7 +172,7 @@ const Home = () => {
           {/* Model Picker */}
           <TouchableOpacity
             onPress={() => selectedVehicle.brand && setModelModal(true)}
-            className="mb-4 flex-row items-center justify-between rounded-xl px-4 py-3"
+            className="mb-4 flex-row items-center justify-between rounded-xl px-4 py-3 border-2 border-slate-300"
             style={{ backgroundColor: "#F3F4F6", opacity: selectedVehicle.brand ? 1 : 0.5 }}
           >
             <View className="flex-row items-center gap-x-2">
@@ -196,16 +200,16 @@ const Home = () => {
         {/* ── Categories ── */}
         <Text className="mx-4 mt-5 mb-3 text-lg font-bold text-gray-900">Categories</Text>
         <View className="flex-row flex-wrap px-4 gap-3">
-          {CATEGORIES.map((cat) => (
+          {CATEGORIES.map((cat, i) => (
             <TouchableOpacity
-              key={cat.key}
+              key={i}
               onPress={() =>
                 router.push({
                   pathname: "/products",
                   params: { brand: "", model: "", category: cat.key },
                 })
               }
-              className="w-[47%] flex-row items-center gap-x-3 rounded-xl px-4 py-4"
+              className="w-[47%] flex-row items-center gap-x-3 rounded-xl px-4 py-4 border-2 border-slate-300"
               style={{ backgroundColor: "#FFFFFF" }}
             >
               <MaterialCommunityIcons name={cat.icon} size={22} color="#EF4444" />
@@ -215,47 +219,74 @@ const Home = () => {
         </View>
 
         {/* ── Featured Products ── */}
-        <Text className="mx-4 mt-5 mb-3 text-lg font-bold text-gray-900">Featured Products</Text>
-        <View className="px-4 gap-y-3 mb-4">
-          {featured.map((item) => {
+        <Text className="mx-4 mt-5 mb-3 text-lg font-bold text-gray-900 pt-6">Featured Products</Text>
+        <View className="w-full flex-row flex-wrap justify-between gap-y-4 px-4 mb-4">
+          {featured.map((item, i) => {
             const compatible = isCompatible(item);
             return (
               <TouchableOpacity
-                key={item.id}
-                onPress={() => router.push({ pathname: "/productDetail", params: { id: item.id } })}
-                className="flex-row items-center rounded-2xl overflow-hidden"
-                style={{ backgroundColor: "#FFFFFF" }}
+                key={item._id || i}
+                onPress={() => router.push({ pathname: "/productDetail", params: { id: item._id, brand: selectedVehicle.brand, model: selectedVehicle.model } })}
+                activeOpacity={0.7}
+                className="w-[48%] rounded-3xl bg-white border border-slate-200 p-2 overflow-hidden shadow-sm"
               >
-                <Image
-                  source={item.image}
-                  className="h-24 w-24"
-                  resizeMode="cover"
-                />
-                <View className="flex-1 px-3 py-3">
+                <View className="relative w-full aspect-square rounded-2xl overflow-hidden bg-slate-100 mb-3">
+                  <Image
+                    source={{
+                      uri: item.images && item.images.length > 0
+                        ? item.images[i % item.images.length]
+                        : (item.category && CATEGORY_PLACEHOLDERS[item.category]
+                          ? CATEGORY_PLACEHOLDERS[item.category][i % 4]
+                          : DEFAULT_PLACEHOLDERS[0])
+                    }}
+                    className="w-full h-full"
+                    resizeMode="cover"
+                  />
                   {compatible && (
-                    <View
-                      className="self-start rounded-full px-2 py-0.5 mb-1"
-                      style={{ backgroundColor: "#064E3B" }}
-                    >
-                      <Text style={{ color: "#34D399" }} className="text-xs font-semibold">
+                    <View className="absolute top-2 left-2 bg-[#064E3B]/90 px-2 py-1 rounded-md backdrop-blur-sm">
+                      <Text className="text-[#34D399] text-[10px] font-bold tracking-wider">
                         ✓ Compatible
                       </Text>
                     </View>
                   )}
-                  <Text className="text-gray-900 font-semibold" numberOfLines={1}>{item.name}</Text>
-                  <Text style={{ color: "#6B7280" }} className="text-xs capitalize mb-1">{item.category}</Text>
-                  <Text style={{ color: "#EF4444" }} className="font-bold">₹{item.price.toLocaleString()}</Text>
+                  {(!item.stock || item.stock === 0) && (
+                    <View className="absolute top-2 right-2 bg-rose-500/90 px-2 py-1 rounded-md backdrop-blur-sm">
+                      <Text className="text-white text-[10px] font-bold uppercase tracking-wider">
+                        Out of Stock
+                      </Text>
+                    </View>
+                  )}
                 </View>
-                <View className="px-3">
-                  <View
-                    className="rounded-full p-2"
-                    style={{ backgroundColor: item.stock ? "#EF444420" : "#F3F4F620" }}
+
+                <View className="px-2 pb-2">
+                  <Text
+                    className="text-slate-900 font-bold text-base mb-1 tracking-tight"
+                    numberOfLines={1}
                   >
-                    <Ionicons
-                      name="chevron-forward"
-                      size={16}
-                      color={item.stock ? "#EF4444" : "#6B7280"}
-                    />
+                    {item.name}
+                  </Text>
+
+                  <View className="flex-row justify-between items-center mb-3">
+                    <Text
+                      className="text-slate-500 text-xs font-medium"
+                      numberOfLines={1}
+                    >
+                      {item.category}
+                    </Text>
+                    <Text className="text-slate-400 text-xs font-medium">
+                      {item.stock} left
+                    </Text>
+                  </View>
+
+                  <View className="flex-row justify-between items-center mt-1">
+                    <Text className="text-rose-600 font-bold text-lg">
+                      ₹{item.price}
+                    </Text>
+                    <View
+                      className="bg-slate-50 p-1.5 rounded-full border border-slate-200"
+                    >
+                      <Ionicons name="chevron-forward" size={14} color="#64748B" />
+                    </View>
                   </View>
                 </View>
               </TouchableOpacity>
@@ -270,24 +301,6 @@ const Home = () => {
         >
           <Text style={{ color: "#6B7280" }} className="font-semibold">View All Products →</Text>
         </TouchableOpacity>
-
-        {/* ── Why Choose Us ── */}
-        <Text className="mx-4 mt-2 mb-3 text-lg font-bold text-gray-900">Why MechPro?</Text>
-        <View className="mx-4 mb-8 gap-y-3">
-          {WHY_US.map((item, i) => (
-            <View
-              key={i}
-              className="flex-row items-center gap-x-4 rounded-xl px-4 py-3"
-              style={{ backgroundColor: "#FFFFFF" }}
-            >
-              <Text className="text-2xl">{item.logo}</Text>
-              <View>
-                <Text className="font-bold text-gray-900">{item.head}</Text>
-                <Text style={{ color: "#6B7280" }} className="text-sm">{item.desc}</Text>
-              </View>
-            </View>
-          ))}
-        </View>
       </ScrollView>
 
       {/* ── Brand Modal ── */}
