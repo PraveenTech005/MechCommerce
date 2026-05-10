@@ -1,15 +1,37 @@
 const Order = require("../models/Order");
+const Product = require("../models/Product");
 
 // @desc    Create a new order
 // @route   POST /api/order
 // @access  Public
 const createOrder = async (req, res) => {
   try {
+    // Verify stock first
+    if (req.body.orderItems && req.body.orderItems.length > 0) {
+      for (const item of req.body.orderItems) {
+        const product = await Product.findById(item.id || item._id);
+        if (!product || product.stock < item.quantity) {
+          return res.status(400).json({ message: `Insufficient stock for product: ${item.name}` });
+        }
+      }
+    }
+
     const order = new Order({
       ...req.body,
       user: req.user._id,
     });
     const createdOrder = await order.save();
+
+    // Reduce product stock
+    if (req.body.orderItems && req.body.orderItems.length > 0) {
+      for (const item of req.body.orderItems) {
+        await Product.findByIdAndUpdate(
+          item.id || item._id,
+          { $inc: { stock: -item.quantity } }
+        );
+      }
+    }
+
     res.status(201).json(createdOrder);
   } catch (error) {
     console.error("Error creating order:", error.message);
@@ -23,7 +45,7 @@ const createOrder = async (req, res) => {
 const getOrders = async (req, res) => {
   try {
     const query = req.user.role === "admin" ? {} : { user: req.user._id };
-    const orders = await Order.find(query).populate("user", "name email phone address").sort({ createdAt: -1 });
+    const orders = await Order.find(query).populate("user", "name email phone address city pincode").sort({ createdAt: -1 });
     res.status(200).json(orders);
   } catch (error) {
     console.error("Error fetching orders:", error.message);
@@ -36,7 +58,7 @@ const getOrders = async (req, res) => {
 // @access  Public
 const getOrderById = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id).populate("user", "name email phone address");
+    const order = await Order.findById(req.params.id).populate("user", "name email phone address city pincode");
 
     if (order) {
       res.status(200).json(order);

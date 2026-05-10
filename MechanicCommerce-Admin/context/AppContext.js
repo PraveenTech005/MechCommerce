@@ -93,7 +93,12 @@ export const AppProvider = ({ children }) => {
           },
         },
       );
-      setAllUsers(res.data);
+
+      const filteredUsers = res.data.filter(
+        (item) => item.email !== user.email,
+      );
+
+      setAllUsers(filteredUsers);
     } catch (error) {
       console.log(error || "error fetching from db");
     } finally {

@@ -1,5 +1,5 @@
 import { Image, ScrollView, Text, TouchableOpacity, View, Dimensions } from "react-native";
-import { Ionicons, FontAwesome, Feather } from "@expo/vector-icons";
+import { Ionicons, FontAwesome, Feather, AntDesign } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import products, { CATEGORY_PLACEHOLDERS } from "../seed";
 import { useCart } from "../context/CartContext";
@@ -14,10 +14,13 @@ const DEFAULT_PLACEHOLDERS = [
 
 const ProductDetail = () => {
   const { id, brand, model } = useLocalSearchParams();
-  const { addToCart, cartCount } = useCart();
+  const { addToCart, cartCount, cart, updateQty, removeFromCart } = useCart();
   const [activeIndex, setActiveIndex] = useState(0);
 
   const product = products.find((p) => p._id === id);
+
+  const cartItem = product ? cart.find((i) => (i.product._id || i.product.id) === product._id) : null;
+  const qty = cartItem ? cartItem.qty : 0;
 
   if (!product) {
     return (
@@ -117,7 +120,7 @@ const ProductDetail = () => {
         </View>
 
         {/* Details Section */}
-        <View className="bg-slate-50 -mt-6 rounded-t-[32px] px-6 pt-8 pb-32">
+        <View className="bg-slate-50 -mt-6 rounded-t-[32px] px-6 pt-8 pb-40">
           {/* View Mode */}
           <View className="flex-row justify-between items-start mb-2">
             <View className="flex-1">
@@ -269,16 +272,62 @@ const ProductDetail = () => {
 
       {/* ── Add to Cart Button ── */}
       <View className="absolute bottom-0 w-full px-5 py-4 bg-white/80 border-t border-slate-200" style={{ paddingBottom: 30, backgroundColor: "rgba(255, 255, 255, 0.9)" }}>
-        <TouchableOpacity
-          onPress={handleAdd}
-          disabled={!product.stock}
-          className={`flex-row items-center justify-center gap-x-2 rounded-2xl py-4 shadow-sm ${product.stock ? "bg-rose-600" : "bg-slate-300"}`}
-        >
-          <FontAwesome name="cart-plus" size={20} color={product.stock ? "white" : "#94A3B8"} />
-          <Text className={`text-base font-bold ${product.stock ? "text-white" : "text-slate-500"}`}>
-            {product.stock ? "Add to Cart" : "Out of Stock"}
-          </Text>
-        </TouchableOpacity>
+        {qty > 0 ? (
+          <View className="flex-col gap-y-3">
+             <View className="flex-row items-center justify-between gap-x-3">
+                <TouchableOpacity 
+                   onPress={() => removeFromCart(product._id)}
+                   className="flex-row items-center bg-rose-50 px-4 py-3 rounded-2xl border border-rose-100 flex-1 justify-center"
+                >
+                   <Ionicons name="trash-outline" size={20} color="#E11D48" />
+                   <Text className="text-rose-600 font-bold ml-2">Remove</Text>
+                </TouchableOpacity>
+
+                <View className="flex-row items-center bg-slate-100 rounded-2xl p-1 border border-slate-200">
+                  <TouchableOpacity
+                    onPress={() => updateQty(product._id, qty - 1)}
+                    className="bg-white p-3 rounded-xl shadow-sm"
+                  >
+                    <AntDesign name="minus" size={16} color="#0F172A" />
+                  </TouchableOpacity>
+                  
+                  <Text className="text-lg font-bold text-slate-900 w-10 text-center">{qty}</Text>
+                  
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (qty < product.stock) {
+                        updateQty(product._id, qty + 1);
+                      } else {
+                        Toast.show({ type: "info", text1: "Maximum stock reached" });
+                      }
+                    }}
+                    className="bg-white p-3 rounded-xl shadow-sm"
+                  >
+                    <AntDesign name="plus" size={16} color="#0F172A" />
+                  </TouchableOpacity>
+                </View>
+             </View>
+             
+             <TouchableOpacity
+               onPress={() => router.push("/cart")}
+               className="bg-rose-600 rounded-2xl py-4 flex-row items-center justify-center shadow-sm"
+             >
+               <Text className="text-white font-bold text-base mr-2">Proceed to Checkout</Text>
+               <Ionicons name="arrow-forward" size={18} color="white" />
+             </TouchableOpacity>
+          </View>
+        ) : (
+          <TouchableOpacity
+            onPress={handleAdd}
+            disabled={!product.stock}
+            className={`flex-row items-center justify-center gap-x-2 rounded-2xl py-4 shadow-sm ${product.stock ? "bg-rose-600" : "bg-slate-300"}`}
+          >
+            <FontAwesome name="cart-plus" size={20} color={product.stock ? "white" : "#94A3B8"} />
+            <Text className={`text-base font-bold ${product.stock ? "text-white" : "text-slate-500"}`}>
+              {product.stock ? "Add to Cart" : "Out of Stock"}
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

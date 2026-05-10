@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { useMemo, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { Ionicons, FontAwesome, AntDesign } from "@expo/vector-icons";
 import products, { CATEGORY_PLACEHOLDERS } from "../seed";
 
 const DEFAULT_PLACEHOLDERS = [
@@ -28,7 +28,7 @@ const CATEGORY_TABS = [
 const Products = () => {
   const { brand, model, category: paramCategory } = useLocalSearchParams();
   const [activeCategory, setActiveCategory] = useState(paramCategory || "All");
-  const { addToCart, cartCount } = useCart();
+  const { addToCart, cartCount, cart, updateQty } = useCart();
 
   const filtered = useMemo(() => {
     let list = products;
@@ -100,17 +100,20 @@ const Products = () => {
       )}
 
       {/* ── Category Tabs ── */}
-      <ScrollView
+      {/* <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         className="px-4 mb-2"
         style={{ maxHeight: 44 }}
-      >
+        contentContainerStyle={{ flexDirection: 'row', alignItems: "center", justifyContent: "space-evenly" }}
+
+      > */}
+      <View className="flex flex-row justify-evenly w-full px-4 py-2">
         {CATEGORY_TABS.map((tab) => (
           <TouchableOpacity
             key={tab.key}
             onPress={() => setActiveCategory(tab.key)}
-            className="mr-2 rounded-full px-4 py-2"
+            className="rounded-full px-5 py-2 border-2 border-gray-200"
             style={{
               backgroundColor: activeCategory === tab.key ? "#EF4444" : "#FFFFFF",
             }}
@@ -122,8 +125,8 @@ const Products = () => {
               {tab.label}
             </Text>
           </TouchableOpacity>
-        ))}
-      </ScrollView>
+        ))}</View>
+      {/* </ScrollView> */}
 
       {/* ── Product List ── */}
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false}>
@@ -200,16 +203,37 @@ const Products = () => {
                       <Text className="text-rose-600 font-bold text-lg">
                         ₹{item.price}
                       </Text>
-                      <TouchableOpacity
-                        onPress={() => item.stock && handleAdd(item)}
-                        className="p-1.5 rounded-full border"
-                        style={{
-                          borderColor: item.stock ? "#EF4444" : "#E2E8F0",
-                          backgroundColor: item.stock ? "#EF4444" : "#F8FAFC",
-                        }}
-                      >
-                        <FontAwesome name="cart-plus" size={14} color={item.stock ? "white" : "#94A3B8"} />
-                      </TouchableOpacity>
+                      {(() => {
+                        const cartItem = cart.find(i => (i.product._id || i.product.id) === item._id);
+                        return cartItem ? (
+                          <View className="flex-row items-center bg-slate-100 rounded-full border border-slate-200">
+                            <TouchableOpacity
+                              onPress={() => updateQty(item._id, cartItem.qty - 1)}
+                              className="p-1.5 px-2"
+                            >
+                              <AntDesign name="minus" size={14} color="#0F172A" />
+                            </TouchableOpacity>
+                            <Text className="text-xs font-bold text-slate-900 px-1 w-4 text-center">{cartItem.qty}</Text>
+                            <TouchableOpacity
+                              onPress={() => updateQty(item._id, cartItem.qty + 1)}
+                              className="p-1.5 px-2"
+                            >
+                              <AntDesign name="plus" size={14} color="#0F172A" />
+                            </TouchableOpacity>
+                          </View>
+                        ) : (
+                          <TouchableOpacity
+                            onPress={() => item.stock && handleAdd(item)}
+                            className="p-1.5 rounded-full border shadow-sm"
+                            style={{
+                              borderColor: item.stock ? "#E11D48" : "#E2E8F0",
+                              backgroundColor: item.stock ? "#E11D48" : "#F8FAFC",
+                            }}
+                          >
+                            <FontAwesome name="cart-plus" size={14} color={item.stock ? "white" : "#94A3B8"} />
+                          </TouchableOpacity>
+                        );
+                      })()}
                     </View>
                   </View>
                 </TouchableOpacity>

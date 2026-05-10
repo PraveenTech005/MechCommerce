@@ -4,28 +4,32 @@ import Toast from "react-native-toast-message";
 import { AppProvider } from "../context/AppContext";
 import { useEffect } from "react";
 import axios from "axios";
+import { StatusBar } from "expo-status-bar";
 
 const RootLayout = () => {
   useEffect(() => {
     const WakeServer = async () => {
       try {
-        const res = await axios.get(`${process.env.EXPO_PUBLIC_API_SERVER}/user/hello`)
+        const res = await axios.get(
+          `${process.env.EXPO_PUBLIC_API_SERVER}/user/hello`,
+        );
         Toast.show({
           type: "success",
           text1: "Server is awake",
-          text2: res.data.message
-        })
+          text2: res.data.message,
+        });
       } catch (error) {
-        console.log("error on waking server", error)
+        console.log("error on waking server", error);
       }
-    }
+    };
 
-    WakeServer()
-  }, [])
+    WakeServer();
+  }, []);
 
   return (
     <AppProvider>
-      <Stack initialRouteName="onboarding">
+      <StatusBar style="dark" />
+      <Stack initialRouteName="index">
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="products/AddProduct"
@@ -55,7 +59,7 @@ const RootLayout = () => {
           }}
         />
         <Stack.Screen
-          name="onboarding"
+          name="index"
           options={{
             headerShown: false,
           }}

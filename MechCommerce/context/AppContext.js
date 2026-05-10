@@ -81,8 +81,8 @@ export const AppProvider = ({ children }) => {
         }
     };
 
-    const fetchVehicles = async () => {
-        if (!user || !user.token) return;
+    const fetchVehicles = async (token) => {
+        if (!token) return;
 
         try {
             const res = await axios.get(
@@ -105,8 +105,7 @@ export const AppProvider = ({ children }) => {
                 await Promise.all([
                     fetchOrders(parsedUser.token),
                     fetchProducts(parsedUser.token),
-                    fetchUsers(parsedUser.token),
-                    fetchVehicles(),
+                    fetchVehicles(parsedUser.token),
                 ]);
 
                 Toast.show({
@@ -122,8 +121,12 @@ export const AppProvider = ({ children }) => {
         }
     };
 
+    useEffect(() => {
+        refreshData();
+    }, []);
+
     return (
-        <AppContext.Provider value={{ user, setUser, orders, setOrders, products, setProducts, loading, setLoading, fetchOrders, fetchProducts, vehicles, fetchVehicles, refreshData }}>
+        <AppContext.Provider value={{ user, setUser, orders, setOrders, products, setProducts, loading, setLoading, vehicles, refreshData }}>
             {children}
         </AppContext.Provider>
     )

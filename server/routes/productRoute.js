@@ -11,7 +11,7 @@ const { protect, authorize } = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 router.route("/")
-  .get(protect, authorize("admin"), getProducts)
+  .get(protect, getProducts)
   .post(protect, authorize("admin"), createProduct);
 
 router.route("/:id")

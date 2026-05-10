@@ -14,7 +14,7 @@ import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 const Signup = () => {
-  const [user, setUser] = useState({ name: "", email: "", password: "", phone: "", address: "" });
+  const [user, setUser] = useState({ name: "", email: "", password: "", phone: "", address: "", city: "", pincode: "" });
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
 
@@ -23,7 +23,7 @@ const Signup = () => {
   const validateEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 
   const handleRegister = async () => {
-    if (!user.name || !user.email || !user.password || !user.phone || !user.address)
+    if (!user.name || !user.email || !user.password || !user.phone || !user.address || !user.city || !user.pincode)
       return Toast.show({ type: "info", text1: "Fill all fields" });
     if (!validateName(user.name) || !validateEmail(user.email) || !validatePassword(user.password))
       return Toast.show({ type: "info", text1: "Check field formats", text2: "Name >2 chars, valid email, password >3 chars" });
@@ -32,7 +32,7 @@ const Signup = () => {
       setLoading(true);
       const res = await axios.post(`${process.env.EXPO_PUBLIC_API_SERVER}/user/register`, user);
       Toast.show({ type: "success", text1: res.data.message || "Registered!", text2: "Please log in" });
-      setUser({ name: "", email: "", password: "" });
+      setUser({ name: "", email: "", password: "", phone: "", address: "", city: "", pincode: "" });
       router.replace("/login");
     } catch (error) {
       console.log("SIGNUP ERROR:", error.message, error?.response?.data);
@@ -129,6 +129,39 @@ const Signup = () => {
                 className="rounded-xl px-4 py-3 text-gray-900"
                 style={{ backgroundColor: "#F3F4F6" }}
               />
+            </View>
+
+            <View className="flex-row gap-x-4">
+              {/* City */}
+              <View className="flex-1">
+                <Text style={{ color: "#6B7280" }} className="text-xs mb-2 font-semibold uppercase">
+                  City
+                </Text>
+                <TextInput
+                  value={user.city}
+                  onChangeText={(t) => setUser({ ...user, city: t })}
+                  placeholder="City"
+                  placeholderTextColor="#9CA3AF"
+                  className="rounded-xl px-4 py-3 text-gray-900"
+                  style={{ backgroundColor: "#F3F4F6" }}
+                />
+              </View>
+
+              {/* Pincode */}
+              <View className="flex-1">
+                <Text style={{ color: "#6B7280" }} className="text-xs mb-2 font-semibold uppercase">
+                  Pincode
+                </Text>
+                <TextInput
+                  value={user.pincode}
+                  onChangeText={(t) => setUser({ ...user, pincode: t })}
+                  keyboardType="numeric"
+                  placeholder="Pincode"
+                  placeholderTextColor="#9CA3AF"
+                  className="rounded-xl px-4 py-3 text-gray-900"
+                  style={{ backgroundColor: "#F3F4F6" }}
+                />
+              </View>
             </View>
 
             {/* Password */}

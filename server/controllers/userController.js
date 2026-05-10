@@ -4,9 +4,9 @@ const User = require("../models/User");
 
 const register = async (req, res) => {
   try {
-    const { name, email, password, phone, address } = req.body;
+    const { name, email, password, phone, address, city, pincode } = req.body;
 
-    if (!name || !email || !password || !phone || !address) {
+    if (!name || !email || !password || !phone || !address || !city || !pincode) {
       return res
         .status(400)
         .json({ message: "Please provide all required fields" });
@@ -27,6 +27,8 @@ const register = async (req, res) => {
       password: hashedPassword,
       phone,
       address,
+      city,
+      pincode,
       role: "user", // Enforce default role for security
     });
 
@@ -70,6 +72,8 @@ const login = async (req, res) => {
         email: savedUser.email,
         phone: savedUser.phone,
         address: savedUser.address,
+        city: savedUser.city,
+        pincode: savedUser.pincode,
         role: savedUser.role,
         token: generateToken(savedUser.email),
       },

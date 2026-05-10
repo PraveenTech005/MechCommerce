@@ -4,18 +4,17 @@ import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useCart } from "../context/CartContext";
 import Toast from "react-native-toast-message";
+import { CATEGORY_PLACEHOLDERS } from "../seed";
+
+const DEFAULT_PLACEHOLDERS = [
+  "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=500",
+];
 
 const Cart = () => {
   const { cart, removeFromCart, updateQty, clearCart, cartTotal } = useCart();
 
-  const handlePlaceOrder = () => {
-    clearCart();
-    Toast.show({
-      type: "success",
-      text1: "Order Placed! 🎉",
-      text2: "Your order has been successfully placed.",
-    });
-    router.replace("/home");
+  const handleCheckout = () => {
+    router.push("/address");
   };
 
   return (
@@ -54,56 +53,71 @@ const Cart = () => {
         <>
           <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false}>
             <View className="gap-y-3 py-2">
-              {cart.map(({ product, qty }) => (
-                <View
-                  key={product.id}
-                  className="flex-row items-center rounded-2xl overflow-hidden"
-                  style={{ backgroundColor: "#FFFFFF" }}
-                >
-                  <Image
-                    source={product.image}
-                    className="h-24 w-24"
-                    resizeMode="cover"
-                  />
-                  <View className="flex-1 px-3 py-3">
-                    <Text className="text-gray-900 font-semibold" numberOfLines={2}>
-                      {product.name}
-                    </Text>
-                    <Text style={{ color: "#6B7280" }} className="text-xs capitalize mt-0.5">
-                      {product.category}
-                    </Text>
-                    <Text style={{ color: "#EF4444" }} className="font-bold mt-1">
-                      ₹{(product.price * qty).toLocaleString()}
-                    </Text>
+              {cart.map(({ product, qty }, i) => {
+                const productId = product._id || product.id;
+                const imageUri = product.images && product.images.length > 0 
+                  ? product.images[0] 
+                  : (product.category && CATEGORY_PLACEHOLDERS[product.category]
+                    ? CATEGORY_PLACEHOLDERS[product.category][i % 4]
+                    : DEFAULT_PLACEHOLDERS[0]);
 
-                    {/* Qty Controls */}
-                    <View className="flex-row items-center gap-x-3 mt-2">
-                      <TouchableOpacity
-                        onPress={() => updateQty(product.id, qty - 1)}
-                        className="rounded-full p-1"
-                        style={{ backgroundColor: "#F3F4F6" }}
-                      >
-                        <AntDesign name="minus" size={14} color="#111827" />
-                      </TouchableOpacity>
-                      <Text className="text-gray-900 font-bold text-base w-6 text-center">{qty}</Text>
-                      <TouchableOpacity
-                        onPress={() => updateQty(product.id, qty + 1)}
-                        className="rounded-full p-1"
-                        style={{ backgroundColor: "#F3F4F6" }}
-                      >
-                        <AntDesign name="plus" size={14} color="#111827" />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                  <TouchableOpacity
-                    onPress={() => removeFromCart(product.id)}
-                    className="mr-3 rounded-full p-2"
-                    style={{ backgroundColor: "#7F1D1D" }}
+                return (
+                  <View
+                    key={productId}
+                    className="flex-row items-center rounded-2xl overflow-hidden"
+                    style={{ backgroundColor: "#FFFFFF" }}
                   >
-                    <Ionicons name="trash-outline" size={18} color="#FCA5A5" />
-                  </TouchableOpacity>
-                </View>
-              ))}
+                    <Image
+                      source={{ uri: imageUri }}
+                      className="h-24 w-24"
+                      resizeMode="cover"
+                    />
+                    <View className="flex-1 px-3 py-3">
+                      <Text className="text-gray-900 font-semibold" numberOfLines={2}>
+                        {product.name}
+                      </Text>
+                      <Text style={{ color: "#6B7280" }} className="text-xs capitalize mt-0.5">
+                        {product.category}
+                      </Text>
+                      <Text style={{ color: "#EF4444" }} className="font-bold mt-1">
+                        ₹{(product.price * qty).toLocaleString()}
+                      </Text>
+
+                      {/* Qty Controls */}
+                      <View className="flex-row items-center gap-x-3 mt-2">
+                        <TouchableOpacity
+                          onPress={() => updateQty(productId, qty - 1)}
+                          className="rounded-full p-1"
+                          style={{ backgroundColor: "#F3F4F6" }}
+                        >
+                          <AntDesign name="minus" size={14} color="#111827" />
+                        </TouchableOpacity>
+                        <Text className="text-gray-900 font-bold text-base w-6 text-center">{qty}</Text>
+                        <TouchableOpacity
+                          onPress={() => {
+                            if (qty < product.stock) {
+                              updateQty(productId, qty + 1);
+                            } else {
+                              Toast.show({ type: "info", text1: "Maximum stock reached" });
+                            }
+                          }}
+                          className="rounded-full p-1"
+                          style={{ backgroundColor: "#F3F4F6" }}
+                        >
+                          <AntDesign name="plus" size={14} color="#111827" />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => removeFromCart(productId)}
+                      className="mr-3 rounded-full p-2"
+                      style={{ backgroundColor: "#7F1D1D" }}
+                    >
+                      <Ionicons name="trash-outline" size={18} color="#FCA5A5" />
+                    </TouchableOpacity>
+                  </View>
+                );
+              })}
             </View>
 
             {/* ── Order Summary ── */}
@@ -135,15 +149,15 @@ const Cart = () => {
             </View>
           </ScrollView>
 
-          {/* ── Place Order ── */}
+          {/* ── Proceed to Checkout ── */}
           <View className="px-4 pb-5 pt-3" style={{ backgroundColor: "#F9FAFB" }}>
             <TouchableOpacity
-              onPress={handlePlaceOrder}
-              className="items-center rounded-2xl py-4"
+              onPress={handleCheckout}
+              className="items-center rounded-2xl py-4 shadow-sm"
               style={{ backgroundColor: "#EF4444" }}
             >
               <Text className="text-base font-bold text-white">
-                Place Order · ₹{cartTotal.toLocaleString()}
+                Proceed to Checkout · ₹{cartTotal.toLocaleString()}
               </Text>
             </TouchableOpacity>
           </View>

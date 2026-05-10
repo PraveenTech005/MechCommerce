@@ -24,25 +24,6 @@ const OrderView = ({ order, close }) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [localOrder, setLocalOrder] = useState(order);
 
-  const updateStatus = async (field, value) => {
-    try {
-      setIsUpdating(true);
-      const res = await axios.put(
-        `${process.env.EXPO_PUBLIC_API_SERVER}/order/${localOrder._id}`,
-        { [field]: value },
-        { headers: { Authorization: `Bearer ${user.token}` } }
-      );
-      setLocalOrder(res.data);
-      fetchOrders(); // refresh global orders list
-      Toast.show({ type: "success", text1: "Order updated successfully" });
-    } catch (error) {
-      console.log("Error updating order:", error);
-      Toast.show({ type: "error", text1: "Failed to update order" });
-    } finally {
-      setIsUpdating(false);
-    }
-  };
-
   return (
     <View className="flex-1 bg-slate-50">
       {/* Header */}
@@ -150,59 +131,34 @@ const OrderView = ({ order, close }) => {
               </Text>
             </View>
 
-            <View className="bg-white/10 rounded-2xl p-4 gap-4">
-              <View className="flex-row justify-between items-center">
-                <Text className="text-slate-900 font-medium">Method</Text>
-                <Text className="font-bold text-slate-900 uppercase tracking-wider">{localOrder.paymentMethod}</Text>
+            <View className="flex-row items-center justify-between mb-6">
+              <View className="flex-row items-center gap-3">
+
+                <Text className="text-sm font-bold text-slate-900">Payment Status</Text>
               </View>
+              <Text className="font-semibold text-sm text-center w-[40%] border rounded bg-white p-1 text-slate-900 tracking-tight">
+                {localOrder.paymentStatus}
+              </Text>
+            </View>
 
-              <View className="h-[1px] bg-white/10 w-full" />
+            <View className="flex-row items-center justify-between mb-6">
+              <View className="flex-row items-center gap-3">
 
-              <View className="flex-col gap-3">
-                <Text className="text-slate-900 font-medium">Payment Status</Text>
-                <View className="flex-row gap-2 flex-wrap">
-                  {Object.keys(paymentStyles).map((status) => {
-                    const isActive = localOrder.paymentStatus === status;
-                    const style = paymentStyles[status];
-                    return (
-                      <TouchableOpacity
-                        key={status}
-                        disabled={isUpdating || isActive}
-                        onPress={() => updateStatus("paymentStatus", status)}
-                        className={`px-3 py-1.5 mb-1 rounded-lg border ${isActive ? style.active : style.inactive}`}
-                      >
-                        <Text className={`text-xs font-bold uppercase ${isActive ? style.text : style.inactiveText}`}>
-                          {status}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  })}
-                </View>
+                <Text className="text-sm font-bold text-slate-900">Order Status</Text>
               </View>
+              <Text className="font-semibold text-sm text-center w-[40%] border rounded bg-white p-1 text-slate-900 tracking-tight">
+                {localOrder.orderStatus}
+              </Text>
+            </View>
 
-              <View className="h-[1px] bg-white/10 w-full" />
+            <View className="flex-row items-center justify-between mb-6">
+              <View className="flex-row items-center gap-3">
 
-              <View className="flex-col gap-3">
-                <Text className="text-slate-900 font-medium">Order Status</Text>
-                <View className="flex-row gap-2 flex-wrap">
-                  {Object.keys(orderStyles).map((status) => {
-                    const isActive = localOrder.orderStatus === status;
-                    const style = orderStyles[status];
-                    return (
-                      <TouchableOpacity
-                        key={status}
-                        disabled={isUpdating || isActive}
-                        onPress={() => updateStatus("orderStatus", status)}
-                        className={`px-3 py-1.5 mb-1 rounded-lg border ${isActive ? style.active : style.inactive}`}
-                      >
-                        <Text className={`text-xs font-bold uppercase ${isActive ? style.text : style.inactiveText}`}>
-                          {status}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  })}
-                </View>
+                <Text className="text-sm font-bold text-slate-900">Payment Method</Text>
               </View>
+              <Text className="font-semibold text-sm text-center w-[40%] border rounded bg-white p-1 text-slate-900 tracking-tight">
+                {localOrder.paymentMethod}
+              </Text>
             </View>
           </View>
 

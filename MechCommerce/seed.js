@@ -602,7 +602,7 @@ export const CATEGORY_PLACEHOLDERS = {
     "https://images.unsplash.com/photo-1542282088-fe8426682b8f?q=80&w=500",
     "https://imgs.search.brave.com/VCa42_07zuSWafn-OE0MaRJxAAa7Q_ZyKy32QFhZTLs/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvOTA1/MjA1NTYwL3Bob3Rv/L2Jpa2UtYWNjZXNz/b3JpZXMtYmlrZS1o/ZWxtZXQtYmlrZS1n/bG92ZXMtZXllZ2xh/c3Nlcy1ib3R0bGUt/aW4taG9sZGVyLmpw/Zz9zPTYxMng2MTIm/dz0wJms9MjAmYz1s/d0pnTGNFVXVCLUx5/ZWZ4NkZBNzBnOVhy/bzBaenprajlhQ0JE/M3VOQlk4PQ",
     "https://images.unsplash.com/photo-1583121274602-3e2820c69888?q=80&w=500",
-    "https://loremflickr.com/cache/resized/3279_5777073521_d6c262945f_c_500_500_nofilter.jpg",
+    "https://imgs.search.brave.com/XGTQj-RIhjhCAwN8CX7w21V1YzTD5pvfKNPQnD7cEfc/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wNzMv/NzY1LzM3Mi9zbWFs/bC9hdXRvbW90aXZl/LXBhcnRzLWFuZC10/b29scy1vbi13b3Jr/c2hvcC10YWJsZS1t/ZWNoYW5pY2FsLWVu/Z2luZWVyaW5nLXNl/cnZpY2UtYW5kLWNh/ci1yZXBhaXItZXF1/aXBtZW50LWNvbmNl/cHQtb2YtbWFpbnRl/bmFuY2UtYW5kLXRl/Y2hub2xvZ3ktcGhv/dG8uanBn",
   ],
 };
 

@@ -4,14 +4,14 @@ import Toast from "react-native-toast-message";
 import { CartProvider } from "../context/CartContext";
 import { useEffect } from "react";
 import axios from "axios";
-import { AppContext, AppProvider } from "../context/AppContext";
+import { AppProvider } from "../context/AppContext";
 
 const RootLayout = () => {
   useEffect(() => {
     const WakeServer = async () => {
       try {
         const res = await axios.get(
-          `${process.env.EXPO_PUBLIC_SERVER_API}/user/hello`,
+          `${process.env.EXPO_PUBLIC_API_SERVER}/user/hello`,
         );
         Toast.show({
           type: "success",

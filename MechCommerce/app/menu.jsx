@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import { Entypo, FontAwesome, MaterialIcons, Ionicons } from "@expo/vector-icons";
+import { Entypo, FontAwesome, MaterialIcons, Ionicons, AntDesign } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
@@ -7,7 +7,7 @@ import Toast from "react-native-toast-message";
 import { useCart } from "../context/CartContext";
 
 const Menu = () => {
-  const { cartCount } = useCart();
+  const { cartCount, clearCart } = useCart();
 
   return (
     <SafeAreaView className="flex-1" style={{ backgroundColor: "#F9FAFB" }}>
@@ -69,6 +69,20 @@ const Menu = () => {
         <TouchableOpacity
           className="flex flex-row items-center gap-x-4 rounded-2xl p-4 border"
           style={{ backgroundColor: "#FFFFFF" }}
+          onPress={() => router.replace("/orders")}
+        >
+          <View
+            className="h-10 w-10 items-center justify-center rounded-full"
+            style={{ backgroundColor: "#F3F4F6" }}
+          >
+            <AntDesign name="product" size={20} color="#111827" />
+          </View>
+          <Text className="text-lg font-semibold text-gray-900">Orders</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          className="flex flex-row items-center gap-x-4 rounded-2xl p-4 border"
+          style={{ backgroundColor: "#FFFFFF" }}
           onPress={() => router.replace("about")}
         >
           <View
@@ -86,6 +100,7 @@ const Menu = () => {
         style={{ backgroundColor: "#EF4444" }}
         onPress={() => {
           AsyncStorage.removeItem("User");
+          clearCart()
           Toast.show({ type: "success", text1: "Logged Out" });
           router.dismiss();
           router.replace("/onboarding");

@@ -35,11 +35,14 @@ const Onboarding = () => {
               text1: "Server Unreachable",
             });
 
-          if (!res.data.isValid)
-            return Toast.show({
+          if (!res.data.isValid) {
+            Toast.show({
               type: "error",
               text1: "Login Expired",
+              text2: "Please log in again"
             });
+            return router.push("/login")
+          }
 
           setUser({ ...res.data.isValid, token: User.token });
           Toast.show({
