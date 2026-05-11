@@ -8,15 +8,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Address = () => {
   const { user } = useContext(AppContext);
-  
+
   const primaryAddress = {
     id: "primary",
     name: user?.name || "John Doe",
     type: "Home",
     phone: user?.phone || "+91 90000 00000",
     address: user?.address || "123, Your Street Name",
-    city: "Your City",
-    pincode: "000000",
+    city: user?.city || "Your City",
+    pincode: user?.pincode || "000000",
   };
 
   const [addresses, setAddresses] = useState([primaryAddress]);
@@ -67,14 +67,14 @@ const Address = () => {
     setAddresses(updatedAddresses);
     setSelectedId(newAddr.id);
     setIsAddingNew(false);
-    
+
     try {
       const additional = updatedAddresses.filter(a => a.id !== "primary");
       await AsyncStorage.setItem(`saved_addresses_${user?._id || 'guest'}`, JSON.stringify(additional));
     } catch (e) {
       console.error("Failed to save address", e);
     }
-    
+
     // Reset form
     setNewName("");
     setNewPhone("");
@@ -98,7 +98,7 @@ const Address = () => {
       <ScrollView className="flex-1 px-4 py-4" showsVerticalScrollIndicator={false}>
         {!isAddingNew ? (
           <>
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => setIsAddingNew(true)}
               className="flex-row items-center justify-center py-4 mb-6 bg-rose-50 rounded-2xl border border-rose-200 border-dashed"
             >
@@ -107,7 +107,7 @@ const Address = () => {
             </TouchableOpacity>
 
             <Text className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3 ml-1">Saved Addresses</Text>
-            
+
             <View className="gap-y-4 pb-20">
               {addresses.map((addr) => (
                 <TouchableOpacity
@@ -118,10 +118,10 @@ const Address = () => {
                 >
                   <View className="flex-row justify-between items-start mb-2">
                     <View className="flex-row items-center">
-                      <Ionicons 
-                        name={addr.type === 'Home' ? "home" : "briefcase"} 
-                        size={18} 
-                        color={selectedId === addr.id ? "#E11D48" : "#6B7280"} 
+                      <Ionicons
+                        name={addr.type === 'Home' ? "home" : "briefcase"}
+                        size={18}
+                        color={selectedId === addr.id ? "#E11D48" : "#6B7280"}
                       />
                       <Text className={`ml-2 font-bold text-base ${selectedId === addr.id ? 'text-rose-700' : 'text-gray-900'}`}>
                         {addr.type}
@@ -131,7 +131,7 @@ const Address = () => {
                       {selectedId === addr.id && <View className="h-2.5 w-2.5 rounded-full bg-rose-500" />}
                     </View>
                   </View>
-                  
+
                   <Text className="font-bold text-gray-900 mb-1">{addr.name} <Text className="font-normal text-gray-500">| {addr.phone}</Text></Text>
                   <Text className="text-gray-600 leading-5">{addr.address}</Text>
                   {addr.city && addr.pincode && <Text className="text-gray-600">{addr.city} - {addr.pincode}</Text>}
@@ -142,62 +142,62 @@ const Address = () => {
         ) : (
           <View className="bg-white p-5 rounded-3xl shadow-sm mb-10">
             <Text className="text-lg font-bold text-gray-900 mb-4">Contact Details</Text>
-            <TextInput 
-              placeholder="Full Name" 
+            <TextInput
+              placeholder="Full Name"
               value={newName}
               onChangeText={setNewName}
-              className="bg-gray-50 p-4 rounded-xl mb-3 text-gray-900 border border-gray-100" 
+              className="bg-gray-50 p-4 rounded-xl mb-3 text-gray-900 border border-gray-100"
             />
-            <TextInput 
-              placeholder="Phone Number" 
-              keyboardType="phone-pad" 
+            <TextInput
+              placeholder="Phone Number"
+              keyboardType="phone-pad"
               value={newPhone}
               onChangeText={setNewPhone}
-              className="bg-gray-50 p-4 rounded-xl mb-6 text-gray-900 border border-gray-100" 
+              className="bg-gray-50 p-4 rounded-xl mb-6 text-gray-900 border border-gray-100"
             />
-            
+
             <Text className="text-lg font-bold text-gray-900 mb-4">Address</Text>
-            <TextInput 
-              placeholder="House No, Building, Street" 
+            <TextInput
+              placeholder="House No, Building, Street"
               value={newAddressStr}
               onChangeText={setNewAddressStr}
-              className="bg-gray-50 p-4 rounded-xl mb-3 text-gray-900 border border-gray-100" 
+              className="bg-gray-50 p-4 rounded-xl mb-3 text-gray-900 border border-gray-100"
             />
-            <TextInput 
-              placeholder="City" 
+            <TextInput
+              placeholder="City"
               value={newCity}
               onChangeText={setNewCity}
-              className="bg-gray-50 p-4 rounded-xl mb-3 text-gray-900 border border-gray-100" 
+              className="bg-gray-50 p-4 rounded-xl mb-3 text-gray-900 border border-gray-100"
             />
-            <TextInput 
-              placeholder="Pincode" 
-              keyboardType="numeric" 
+            <TextInput
+              placeholder="Pincode"
+              keyboardType="numeric"
               value={newPincode}
               onChangeText={setNewPincode}
-              className="bg-gray-50 p-4 rounded-xl mb-6 text-gray-900 border border-gray-100" 
+              className="bg-gray-50 p-4 rounded-xl mb-6 text-gray-900 border border-gray-100"
             />
-            
+
             <View className="flex-row gap-x-3 mb-4">
-               <TouchableOpacity 
-                 onPress={() => setNewType("Home")}
-                 className={`flex-1 py-3 rounded-xl border items-center ${newType === "Home" ? "bg-rose-50 border-rose-200" : "bg-white border-gray-200"}`}
-               >
-                 <Text className={`font-bold ${newType === "Home" ? "text-rose-600" : "text-gray-600"}`}>Home</Text>
-               </TouchableOpacity>
-               <TouchableOpacity 
-                 onPress={() => setNewType("Work")}
-                 className={`flex-1 py-3 rounded-xl border items-center ${newType === "Work" ? "bg-rose-50 border-rose-200" : "bg-white border-gray-200"}`}
-               >
-                 <Text className={`font-bold ${newType === "Work" ? "text-rose-600" : "text-gray-600"}`}>Work</Text>
-               </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setNewType("Home")}
+                className={`flex-1 py-3 rounded-xl border items-center ${newType === "Home" ? "bg-rose-50 border-rose-200" : "bg-white border-gray-200"}`}
+              >
+                <Text className={`font-bold ${newType === "Home" ? "text-rose-600" : "text-gray-600"}`}>Home</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setNewType("Work")}
+                className={`flex-1 py-3 rounded-xl border items-center ${newType === "Work" ? "bg-rose-50 border-rose-200" : "bg-white border-gray-200"}`}
+              >
+                <Text className={`font-bold ${newType === "Work" ? "text-rose-600" : "text-gray-600"}`}>Work</Text>
+              </TouchableOpacity>
             </View>
 
             <View className="flex-row gap-x-3 mt-4">
               <TouchableOpacity onPress={() => setIsAddingNew(false)} className="flex-1 py-4 rounded-xl items-center bg-gray-100">
                 <Text className="font-bold text-gray-700">Cancel</Text>
               </TouchableOpacity>
-              <TouchableOpacity 
-                onPress={handleSaveAddress} 
+              <TouchableOpacity
+                onPress={handleSaveAddress}
                 className="flex-1 py-4 rounded-xl items-center bg-rose-600"
                 style={{ opacity: (!newName || !newPhone || !newAddressStr) ? 0.5 : 1 }}
                 disabled={!newName || !newPhone || !newAddressStr}

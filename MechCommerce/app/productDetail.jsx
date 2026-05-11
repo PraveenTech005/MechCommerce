@@ -1,10 +1,11 @@
 import { Image, ScrollView, Text, TouchableOpacity, View, Dimensions } from "react-native";
 import { Ionicons, FontAwesome, Feather, AntDesign } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
-import products, { CATEGORY_PLACEHOLDERS } from "../seed";
+import { CATEGORY_PLACEHOLDERS } from "../seed";
+import { AppContext } from "../context/AppContext";
 import { useCart } from "../context/CartContext";
 import Toast from "react-native-toast-message";
-import { useState } from "react";
+import { useState, useContext } from "react";
 
 const { width } = Dimensions.get("window");
 
@@ -16,8 +17,9 @@ const ProductDetail = () => {
   const { id, brand, model } = useLocalSearchParams();
   const { addToCart, cartCount, cart, updateQty, removeFromCart } = useCart();
   const [activeIndex, setActiveIndex] = useState(0);
+  const { products } = useContext(AppContext);
 
-  const product = products.find((p) => p._id === id);
+  const product = (products || []).find((p) => p._id === id);
 
   const cartItem = product ? cart.find((i) => (i.product._id || i.product.id) === product._id) : null;
   const qty = cartItem ? cartItem.qty : 0;

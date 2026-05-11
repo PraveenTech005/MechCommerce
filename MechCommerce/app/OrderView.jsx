@@ -20,8 +20,6 @@ const orderStyles = {
 };
 
 const OrderView = ({ order, close }) => {
-  const { user, fetchOrders } = useContext(AppContext);
-  const [isUpdating, setIsUpdating] = useState(false);
   const [localOrder, setLocalOrder] = useState(order);
 
   return (
@@ -96,7 +94,7 @@ const OrderView = ({ order, close }) => {
                   className="flex-row items-center bg-white p-3 rounded-[24px] border border-slate-100 shadow-sm"
                 >
                   <Image
-                    source={{ uri: item.image }}
+                    source={{ uri: item.image || "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=500" }}
                     className="w-[72px] h-[72px] rounded-[16px] bg-slate-100"
                   />
                   <View className="flex-1 ml-4 justify-center py-1">

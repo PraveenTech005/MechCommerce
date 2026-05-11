@@ -11,7 +11,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { vehicleCatalog, CATEGORY_PLACEHOLDERS } from "../seed";
+import { CATEGORY_PLACEHOLDERS } from "../seed";
 import { AppContext } from "../context/AppContext";
 
 const DEFAULT_PLACEHOLDERS = [
@@ -36,11 +36,11 @@ const Home = () => {
   const [modelModal, setModelModal] = useState(false);
   const [selectedVehicle, setSelectedVehicle] = useState({ brand: '', model: '' });
   const { cartCount } = useCart();
-  const { user, products, orders, refreshData } = useContext(AppContext);
+  const { user, products, orders, refreshData, vehicles } = useContext(AppContext);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
-  const brands = vehicleCatalog.map(v => v.brand);
-  const models = selectedVehicle.brand ? vehicleCatalog.find(v => v.brand === selectedVehicle.brand)?.model || [] : [];
+  const brands = vehicles.map(v => v.brand);
+  const models = selectedVehicle.brand ? vehicles.find(v => v.brand === selectedVehicle.brand)?.model || [] : [];
 
   const featured = products?.filter((item) => item.isFeatured)
 
@@ -237,9 +237,9 @@ const Home = () => {
                     <Image
                       source={{
                         uri: item.images && item.images.length > 0
-                          ? item.images[i % item.images.length]
+                          ? item.images[0]
                           : (item.category && CATEGORY_PLACEHOLDERS[item.category]
-                            ? CATEGORY_PLACEHOLDERS[item.category][i % 4]
+                            ? CATEGORY_PLACEHOLDERS[item.category][0]
                             : DEFAULT_PLACEHOLDERS[0])
                       }}
                       className="w-full h-full"

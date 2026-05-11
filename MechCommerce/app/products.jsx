@@ -5,10 +5,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons, FontAwesome, AntDesign } from "@expo/vector-icons";
-import products, { CATEGORY_PLACEHOLDERS } from "../seed";
+import { CATEGORY_PLACEHOLDERS } from "../seed";
+import { AppContext } from "../context/AppContext";
 
 const DEFAULT_PLACEHOLDERS = [
   "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=500",
@@ -29,9 +30,10 @@ const Products = () => {
   const { brand, model, category: paramCategory } = useLocalSearchParams();
   const [activeCategory, setActiveCategory] = useState(paramCategory || "All");
   const { addToCart, cartCount, cart, updateQty } = useCart();
+  const { products } = useContext(AppContext);
 
   const filtered = useMemo(() => {
-    let list = products;
+    let list = products || [];
 
     // Vehicle filter
     if (brand && model) {
@@ -155,9 +157,9 @@ const Products = () => {
                     <Image
                       source={{
                         uri: item.images && item.images.length > 0
-                          ? item.images[i % item.images.length]
+                          ? item.images[0]
                           : (item.category && CATEGORY_PLACEHOLDERS[item.category]
-                            ? CATEGORY_PLACEHOLDERS[item.category][i % 4]
+                            ? CATEGORY_PLACEHOLDERS[item.category][0]
                             : DEFAULT_PLACEHOLDERS[0])
                       }}
                       className="w-full h-full"

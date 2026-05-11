@@ -5,10 +5,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import products, { CATEGORY_PLACEHOLDERS } from "../seed";
+import { CATEGORY_PLACEHOLDERS } from "../seed";
+import { AppContext } from "../context/AppContext";
 
 const DEFAULT_PLACEHOLDERS = [
   "https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=500",
@@ -22,21 +23,23 @@ const SearchPage = () => {
   const [results, setResults] = useState([]);
   const { addToCart, cartCount } = useCart();
 
+  const { products } = useContext(AppContext);
+
   useEffect(() => {
     if (type === "search") {
       setResults(
-        products.filter((item) =>
+        (products || []).filter((item) =>
           item.name.toLowerCase().includes(name.toLowerCase()),
         ),
       );
     } else if (type === "category") {
       setResults(
-        products.filter(
+        (products || []).filter(
           (item) => item.category.toLowerCase() === name.toLowerCase(),
         ),
       );
     }
-  }, [name, type]);
+  }, [name, type, products]);
 
   const handleAdd = (product) => {
     if (!product.stock) return;

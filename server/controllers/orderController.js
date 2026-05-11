@@ -13,6 +13,9 @@ const createOrder = async (req, res) => {
         if (!product || product.stock < item.quantity) {
           return res.status(400).json({ message: `Insufficient stock for product: ${item.name}` });
         }
+        if (product.images && product.images.length > 0) {
+          item.image = product.images[0];
+        }
       }
     }
 

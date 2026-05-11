@@ -34,7 +34,7 @@ const Login = () => {
       const res = await axios.post(`${process.env.EXPO_PUBLIC_API_SERVER}/user/login`, user);
       await AsyncStorage.setItem("User", JSON.stringify(res.data.user));
       Toast.show({ type: "success", text1: res.data.message || "Logged in!" });
-      setUser({ email: "", password: "" });
+      setUser(res.data.user);
       router.replace("/home");
     } catch (error) {
       console.log("LOGIN ERROR:", error.message, error?.response?.data);
