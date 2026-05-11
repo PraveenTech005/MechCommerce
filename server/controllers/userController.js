@@ -74,6 +74,7 @@ const login = async (req, res) => {
         address: savedUser.address,
         city: savedUser.city,
         pincode: savedUser.pincode,
+        createdAt: savedUser.createdAt,
         role: savedUser.role,
         token: generateToken(savedUser.email),
       },
@@ -120,6 +121,43 @@ const verifyUser = async (req, res) => {
 //     res.status(500).json({ message: "Server error" });
 //   }
 // };
+
+const updateProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.name = req.body.name || user.name;
+    user.phone = req.body.phone || user.phone;
+    user.address = req.body.address || user.address;
+    user.city = req.body.city || user.city;
+    user.pincode = req.body.pincode || user.pincode;
+
+    const updatedUser = await user.save();
+
+    res.status(200).json({
+      message: "Profile updated successfully",
+      user: {
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        phone: updatedUser.phone,
+        address: updatedUser.address,
+        city: updatedUser.city,
+        pincode: updatedUser.pincode,
+        createdAt: updatedUser.createdAt,
+        role: updatedUser.role,
+        token: generateToken(updatedUser.email),
+      },
+    });
+  } catch (error) {
+    console.error("Error updating profile:", error.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 const getAllUsers = async (req, res) => {
   try {
@@ -168,12 +206,29 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const deleteMyAccount = async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "Account deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting account:", error.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   register,
   login,
   verifyUser,
   // getProfile,
+  updateProfile,
   getAllUsers,
   updateUserRole,
   deleteUser,
+  deleteMyAccount,
 };

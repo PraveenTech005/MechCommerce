@@ -5,6 +5,7 @@ import { CartProvider } from "../context/CartContext";
 import { useEffect } from "react";
 import axios from "axios";
 import { AppProvider } from "../context/AppContext";
+import { StatusBar } from "expo-status-bar";
 
 const RootLayout = () => {
   useEffect(() => {
@@ -28,6 +29,7 @@ const RootLayout = () => {
   return (
     <AppProvider>
       <CartProvider>
+        <StatusBar style="dark" />
         <Stack
           initialRouteName="onboarding"
           screenOptions={{ headerShown: false }}

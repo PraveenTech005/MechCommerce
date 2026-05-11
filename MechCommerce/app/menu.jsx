@@ -1,13 +1,51 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { Entypo, FontAwesome, MaterialIcons, Ionicons, AntDesign } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import Toast from "react-native-toast-message";
 import { useCart } from "../context/CartContext";
+import axios from "axios";
 
 const Menu = () => {
   const { cartCount, clearCart } = useCart();
+
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      "Delete Account",
+      "Are you sure you want to permanently delete your account? This action cannot be undone.",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              const storedUser = await AsyncStorage.getItem("User");
+              const user = storedUser ? JSON.parse(storedUser) : null;
+              if (user?.token) {
+                await axios.delete(`${process.env.EXPO_PUBLIC_API_SERVER}/user/profile`, {
+                  headers: { Authorization: `Bearer ${user.token}` },
+                });
+              }
+              await AsyncStorage.removeItem("User");
+              clearCart();
+              Toast.show({ type: "success", text1: "Account Deleted" });
+              router.dismissAll();
+              router.replace("/onboarding");
+            } catch (error) {
+              console.error("Error deleting account:", error);
+              Toast.show({
+                type: "error",
+                text1: "Error",
+                text2: "Failed to delete account. Please try again.",
+              });
+            }
+          },
+        },
+      ]
+    );
+  };
 
   return (
     <SafeAreaView className="flex-1" style={{ backgroundColor: "#F9FAFB" }}>
@@ -92,6 +130,34 @@ const Menu = () => {
             <FontAwesome name="info" size={20} color="#111827" />
           </View>
           <Text className="text-lg font-semibold text-gray-900">About Us</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          className="flex flex-row items-center gap-x-4 rounded-2xl p-4 border"
+          style={{ backgroundColor: "#FFFFFF" }}
+          onPress={() => router.push("/privacyPolicy")}
+        >
+          <View
+            className="h-10 w-10 items-center justify-center rounded-full"
+            style={{ backgroundColor: "#F3F4F6" }}
+          >
+            <MaterialIcons name="privacy-tip" size={20} color="#111827" />
+          </View>
+          <Text className="text-lg font-semibold text-gray-900">Privacy Policy</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          className="flex flex-row items-center gap-x-4 rounded-2xl p-4 border border-red-200"
+          style={{ backgroundColor: "#FEF2F2" }}
+          onPress={handleDeleteAccount}
+        >
+          <View
+            className="h-10 w-10 items-center justify-center rounded-full"
+            style={{ backgroundColor: "#FEE2E2" }}
+          >
+            <MaterialIcons name="delete" size={20} color="#DC2626" />
+          </View>
+          <Text className="text-lg font-semibold text-red-600">Delete Account</Text>
         </TouchableOpacity>
       </View>
 

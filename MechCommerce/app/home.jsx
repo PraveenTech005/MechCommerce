@@ -48,6 +48,7 @@ const Home = () => {
     const fetchUser = async () => {
       try {
         if (!user?.token) return router.replace("/onboarding");
+        refreshData();
       } catch (e) {
         console.error(e);
       }

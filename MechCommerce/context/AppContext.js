@@ -121,10 +121,6 @@ export const AppProvider = ({ children }) => {
         }
     };
 
-    useEffect(() => {
-        refreshData();
-    }, []);
-
     return (
         <AppContext.Provider value={{ user, setUser, orders, setOrders, products, setProducts, loading, setLoading, vehicles, refreshData }}>
             {children}
